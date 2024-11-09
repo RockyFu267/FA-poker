@@ -18,3 +18,5 @@ type CardRank struct {
 type HandCard struct {
 	HandCard [2]Card `json:"handCard"`
 }
+
+//
