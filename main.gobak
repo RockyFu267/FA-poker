@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"math/rand"
 	"os"
@@ -9,8 +8,9 @@ import (
 	"strings"
 )
 
-var suits = []string{"黑桃", "红桃", "梅花", "方片"}                  // 四种花色
-var ranks = []int{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14} // 点数2-14，J(11), Q(12), K(13), A(14)
+var suits = []string{"♠", "♥", "♣", "♦"} // 四种花色
+// var ranks = []int{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14} // 点数2-14，J(11), Q(12), K(13), A(14)
+var ranks = []int{2}
 
 func createDeck() []string {
 	var deck []string
@@ -53,10 +53,10 @@ func sortHand(hand string) string {
 	cards := strings.Fields(hand)
 
 	// 获取牌的花色和点数
-	card1Suit := cards[0][:len(cards[0])-1] // 花色
-	card1Rank := cards[0][len(cards[0])-1:] // 点数
-	card2Suit := cards[1][:len(cards[1])-1] // 花色
-	card2Rank := cards[1][len(cards[1])-1:] // 点数
+	card1Suit := cards[0][:3] // 花色（注意这里是三个字符）
+	card1Rank := cards[0][3:] // 点数
+	card2Suit := cards[1][:3] // 花色（注意这里是三个字符）
+	card2Rank := cards[1][3:] // 点数
 
 	// 将牌面值转为数字
 	card1Value := stringToRank(card1Rank)
@@ -105,13 +105,13 @@ func atoi(s string) int {
 // 花色优先级：黑桃 > 红桃 > 梅花 > 方片
 func suitPriority(suit string) int {
 	switch suit {
-	case "黑桃":
+	case "♠":
 		return 1
-	case "红桃":
+	case "♥":
 		return 2
-	case "梅花":
+	case "♣":
 		return 3
-	case "方片":
+	case "♦":
 		return 4
 	default:
 		return 5
@@ -169,15 +169,12 @@ func printResultsToFile(handStats map[string]int) {
 }
 
 func main() {
-	// 从标准输入读取玩家输入的手牌
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("请输入你的两张牌（例如：方片7 红桃A）：")
-	playerInput, _ := reader.ReadString('\n')
-	playerInput = strings.TrimSpace(playerInput)
-	playerHand := strings.Fields(playerInput)
 
 	// 创建一副扑克牌
 	deck := createDeck()
+
+	// 玩家输入的手牌
+	playerHand := []string{"♦7", "♥7"}
 
 	// 去掉玩家的两张牌
 	var remainingDeck []string
@@ -191,7 +188,7 @@ func main() {
 	handStats := make(map[string]int)
 
 	// 模拟10万次洗牌和发牌
-	numSimulations := 1000000
+	numSimulations := 100000
 	for i := 0; i < numSimulations; i++ {
 		// 获取对手手牌组合
 		hand := getRandomHand(remainingDeck)

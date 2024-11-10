@@ -1,7 +1,11 @@
 package cardFunc
 
 import (
+	"encoding/json"
+	"fmt"
 	"math/rand"
+	"os"
+	"sort"
 	"time"
 )
 
@@ -26,168 +30,12 @@ func (p Card) CardTranslate() string {
 	if suitExists && rankExists {
 		return suitSymbol + rankSymbol
 	}
-	return "Invalid Card"
-	// if p.Suit == "黑桃" && p.Rank == 14 {
-	// 	return "♠A"
-	// }
-	// if p.Suit == "黑桃" && p.Rank == 13 {
-	// 	return "♠K"
-	// }
-	// if p.Suit == "黑桃" && p.Rank == 12 {
-	// 	return "♠Q"
-	// }
-	// if p.Suit == "黑桃" && p.Rank == 11 {
-	// 	return "♠J"
-	// }
-	// if p.Suit == "黑桃" && p.Rank == 10 {
-	// 	return "♠10"
-	// }
-	// if p.Suit == "黑桃" && p.Rank == 9 {
-	// 	return "♠9"
-	// }
-	// if p.Suit == "黑桃" && p.Rank == 8 {
-	// 	return "♠8"
-	// }
-	// if p.Suit == "黑桃" && p.Rank == 7 {
-	// 	return "♠7"
-	// }
-	// if p.Suit == "黑桃" && p.Rank == 6 {
-	// 	return "♠6"
-	// }
-	// if p.Suit == "黑桃" && p.Rank == 5 {
-	// 	return "♠5"
-	// }
-	// if p.Suit == "黑桃" && p.Rank == 4 {
-	// 	return "♠4"
-	// }
-	// if p.Suit == "黑桃" && p.Rank == 3 {
-	// 	return "♠3"
-	// }
-	// if p.Suit == "黑桃" && p.Rank == 2 {
-	// 	return "♠2"
-	// }
-	// if p.Suit == "红桃" && p.Rank == 14 {
-	// 	return "♥A"
-	// }
-	// if p.Suit == "红桃" && p.Rank == 13 {
-	// 	return "♥K"
-	// }
-	// if p.Suit == "红桃" && p.Rank == 12 {
-	// 	return "♥Q"
-	// }
-	// if p.Suit == "红桃" && p.Rank == 11 {
-	// 	return "♥J"
-	// }
-	// if p.Suit == "红桃" && p.Rank == 10 {
-	// 	return "♥10"
-	// }
-	// if p.Suit == "红桃" && p.Rank == 9 {
-	// 	return "♥9"
-	// }
-	// if p.Suit == "红桃" && p.Rank == 8 {
-	// 	return "♥8"
-	// }
-	// if p.Suit == "红桃" && p.Rank == 7 {
-	// 	return "♥7"
-	// }
-	// if p.Suit == "红桃" && p.Rank == 6 {
-	// 	return "♥6"
-	// }
-	// if p.Suit == "红桃" && p.Rank == 5 {
-	// 	return "♥5"
-	// }
-	// if p.Suit == "红桃" && p.Rank == 4 {
-	// 	return "♥4"
-	// }
-	// if p.Suit == "红桃" && p.Rank == 3 {
-	// 	return "♥3"
-	// }
-	// if p.Suit == "红桃" && p.Rank == 2 {
-	// 	return "♥2"
-	// }
-	// if p.Suit == "梅花" && p.Rank == 14 {
-	// 	return "♣A"
-	// }
-	// if p.Suit == "梅花" && p.Rank == 13 {
-	// 	return "♣K"
-	// }
-	// if p.Suit == "梅花" && p.Rank == 12 {
-	// 	return "♣Q"
-	// }
-	// if p.Suit == "梅花" && p.Rank == 11 {
-	// 	return "♣J"
-	// }
-	// if p.Suit == "梅花" && p.Rank == 10 {
-	// 	return "♣10"
-	// }
-	// if p.Suit == "梅花" && p.Rank == 9 {
-	// 	return "♣9"
-	// }
-	// if p.Suit == "梅花" && p.Rank == 8 {
-	// 	return "♣8"
-	// }
-	// if p.Suit == "梅花" && p.Rank == 7 {
-	// 	return "♣7"
-	// }
-	// if p.Suit == "梅花" && p.Rank == 6 {
-	// 	return "♣6"
-	// }
-	// if p.Suit == "梅花" && p.Rank == 5 {
-	// 	return "♣5"
-	// }
-	// if p.Suit == "梅花" && p.Rank == 4 {
-	// 	return "♣4"
-	// }
-	// if p.Suit == "梅花" && p.Rank == 3 {
-	// 	return "♣3"
-	// }
-	// if p.Suit == "梅花" && p.Rank == 2 {
-	// 	return "♣2"
-	// }
-	// if p.Suit == "方片" && p.Rank == 14 {
-	// 	return "♦A"
-	// }
-	// if p.Suit == "方片" && p.Rank == 13 {
-	// 	return "♦K"
-	// }
-	// if p.Suit == "方片" && p.Rank == 12 {
-	// 	return "♦Q"
-	// }
-	// if p.Suit == "方片" && p.Rank == 11 {
-	// 	return "♦J"
-	// }
-	// if p.Suit == "方片" && p.Rank == 10 {
-	// 	return "♦10"
-	// }
-	// if p.Suit == "方片" && p.Rank == 9 {
-	// 	return "♦9"
-	// }
-	// if p.Suit == "方片" && p.Rank == 8 {
-	// 	return "♦8"
-	// }
-	// if p.Suit == "方片" && p.Rank == 7 {
-	// 	return "♦7"
-	// }
-	// if p.Suit == "方片" && p.Rank == 6 {
-	// 	return "♦6"
-	// }
-	// if p.Suit == "方片" && p.Rank == 5 {
-	// 	return "♦5"
-	// }
-	// if p.Suit == "方片" && p.Rank == 4 {
-	// 	return "♦4"
-	// }
-	// if p.Suit == "方片" && p.Rank == 3 {
-	// 	return "♦3"
-	// }
-	// if p.Suit == "方片" && p.Rank == 2 {
-	// 	return "♦2"
-	// }
-	// return "fuck"
+	return "fuck card"
 }
 
 // ShuffleCard 洗牌
 func ShuffleCard() (New52CardList [52]Card) {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	//初始化52张牌
 	var Card52 = [52]Card{
 		{Suit: "黑桃", Rank: 14},
@@ -243,19 +91,103 @@ func ShuffleCard() (New52CardList [52]Card) {
 		{Suit: "方片", Rank: 12},
 		{Suit: "方片", Rank: 13},
 	}
-	//洗牌
-	var new52 [52]Card
-	b := 0
-	r := rand.New(rand.NewSource(time.Now().Unix()))
-	for _, i := range r.Perm(len(Card52)) {
-		val := Card52[i]
-		// fmt.Println(val)
-		// fmt.Println(i)
-		new52[b] = val
-		b = b + 1
-	}
+	// //洗牌
+	// var new52 [52]Card
+	// 洗牌
+	r.Shuffle(len(Card52), func(i, j int) {
+		Card52[i], Card52[j] = Card52[j], Card52[i]
+	})
+	// b := 0
+	// r := rand.New(rand.NewSource(time.Now().Unix()))
+	// for _, i := range r.Perm(len(Card52)) {
+	// 	val := Card52[i]
+	// 	// fmt.Println(val)
+	// 	// fmt.Println(i)
+	// 	new52[b] = val
+	// 	b = b + 1
+	// }
 	//fmt.Println(new52)
-	return new52
+	return Card52
+}
+
+// GetTopTwoCards 从洗好的牌中取前两张牌，并按指定规则排序后赋值给 HandCard 类型的变量
+func GetTopTwoCards(deck [52]Card) HandCard {
+	// 取前两张牌
+	topTwoCards := [2]Card{deck[0], deck[1]}
+
+	// 排序逻辑
+	if topTwoCards[0].Rank < topTwoCards[1].Rank ||
+		(topTwoCards[0].Rank == topTwoCards[1].Rank && compareSuits(topTwoCards[0].Suit, topTwoCards[1].Suit)) {
+		// 交换两张牌
+		topTwoCards[0], topTwoCards[1] = topTwoCards[1], topTwoCards[0]
+	}
+
+	// 将排序后的牌赋值给 HandCard
+	hand := HandCard{
+		HandCard: topTwoCards,
+	}
+
+	return hand
+}
+
+// compareSuits 比较两张牌的花色，黑桃 > 红桃 > 梅花 > 方片
+func compareSuits(suit1, suit2 string) bool {
+	order := map[string]int{
+		"黑桃": 1,
+		"红桃": 2,
+		"梅花": 3,
+		"方片": 4,
+	}
+	return order[suit1] > order[suit2]
+}
+
+// ShuffleAndRecord 执行洗牌100000次，将所有组合以及频率放在一个map里并写入文件
+func ShuffleAndRecord(iterations int, filename string) {
+	results := make(map[string]int)
+
+	for i := 0; i < iterations; i++ {
+		deck := ShuffleCard()
+		hand := GetTopTwoCards(deck)
+
+		handStr := fmt.Sprintf("%s %s", hand.HandCard[0].CardTranslate(), hand.HandCard[1].CardTranslate())
+		results[handStr]++
+	}
+
+	// 将结果按组合频率升序排序
+	type kv struct {
+		Key   string
+		Value int
+	}
+	var sortedResults []kv
+	for k, v := range results {
+		sortedResults = append(sortedResults, kv{k, v})
+	}
+
+	sort.Slice(sortedResults, func(i, j int) bool {
+		return sortedResults[i].Value < sortedResults[j].Value
+	})
+
+	// 将结果写入文件
+	file, err := os.Create(filename)
+	if err != nil {
+		fmt.Println("Error creating file:", err)
+		return
+	}
+	defer file.Close()
+
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ")
+	if err := encoder.Encode(sortedResults); err != nil {
+		fmt.Println("Error encoding results to file:", err)
+		return
+	}
+
+	// 总结
+	fmt.Printf("Total combinations: %d\n", len(results))
+	fmt.Println("Top 10 most frequent combinations:")
+	for i := len(sortedResults) - 1; i >= len(sortedResults)-10 && i >= 0; i-- {
+		fmt.Printf("%s: %d\n", sortedResults[i].Key, sortedResults[i].Value)
+	}
 }
 
 // Judge5From7 7选五的21种牌型的牌力
