@@ -143,19 +143,17 @@ func compareSuits(suit1, suit2 string) bool {
 
 // ShuffleAndRecord 执行洗牌100000次，将所有组合以及频率放在一个map里并写入文件
 func ShuffleAndRecord(iterations int, filename string) {
-	results := make(map[string]int)
+	results := make(map[HandCard]int)
 
 	for i := 0; i < iterations; i++ {
 		deck := ShuffleCard()
 		hand := GetTopTwoCards(deck)
-
-		handStr := fmt.Sprintf("%s %s", hand.HandCard[0].CardTranslate(), hand.HandCard[1].CardTranslate())
-		results[handStr]++
+		results[hand]++
 	}
 
 	// 将结果按组合频率升序排序
 	type kv struct {
-		Key   string
+		Key   HandCard
 		Value int
 	}
 	var sortedResults []kv
@@ -185,8 +183,14 @@ func ShuffleAndRecord(iterations int, filename string) {
 	// 总结
 	fmt.Printf("Total combinations: %d\n", len(results))
 	fmt.Println("Top 10 most frequent combinations:")
+	//最多次数前十
 	for i := len(sortedResults) - 1; i >= len(sortedResults)-10 && i >= 0; i-- {
-		fmt.Printf("%s: %d\n", sortedResults[i].Key, sortedResults[i].Value)
+		fmt.Printf("%s: %d\n", sortedResults[i].Key.HandCard[0].CardTranslate()+sortedResults[i].Key.HandCard[1].CardTranslate(), sortedResults[i].Value)
+	}
+	//最少次数前十
+	fmt.Println("Top 10 least frequent combinations:")
+	for i := 0; i < 10 && i < len(sortedResults); i++ {
+		fmt.Printf("%s: %d\n", sortedResults[i].Key.HandCard[0].CardTranslate()+sortedResults[i].Key.HandCard[1].CardTranslate(), sortedResults[i].Value)
 	}
 }
 

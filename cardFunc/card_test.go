@@ -50,7 +50,7 @@ func Test_GetTopTwoCards(t *testing.T) {
 }
 
 func Test_ShuffleAndRecord(t *testing.T) {
-	ShuffleAndRecord(100000, "res.txt")
+	ShuffleAndRecord(1000000, "res.txt")
 
 }
 
