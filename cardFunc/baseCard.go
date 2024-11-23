@@ -141,7 +141,7 @@ func compareSuits(suit1, suit2 string) bool {
 	return order[suit1] > order[suit2]
 }
 
-// ShuffleAndRecord 执行洗牌100000次，将所有组合以及频率放在一个map里并写入文件
+// ShuffleAndRecord 执行洗牌次，将所有组合以及频率放在一个map里并写入文件
 func ShuffleAndRecord(iterations int, filename string) {
 	results := make(map[HandCard]int)
 
@@ -151,7 +151,20 @@ func ShuffleAndRecord(iterations int, filename string) {
 		results[hand]++
 	}
 
-	// 将结果按组合频率升序排序
+	// 将结果按组合频率升序排序  并统计指定组合
+	//口袋对出现的次数
+	pairCount := 0
+	//同花出现次数
+	suitedCount := 0
+	//同花连张出现次数
+	suitedConnectorCount := 0
+	//Axs 同色且至少包含一张A的出现的次数
+	suitedAceCount := 0
+	//Axo 同色且至少包含一张A的出现的次数
+	aceCount := 0
+	//两张牌都大于等于10出现的次数
+	highCardCount := 0
+
 	type kv struct {
 		Key   HandCard
 		Value int
@@ -159,6 +172,25 @@ func ShuffleAndRecord(iterations int, filename string) {
 	var sortedResults []kv
 	for k, v := range results {
 		sortedResults = append(sortedResults, kv{k, v})
+		if k.HandCard[0].Rank == k.HandCard[1].Rank {
+			pairCount += v
+		}
+		if k.HandCard[0].Suit == k.HandCard[1].Suit {
+			suitedCount += v
+		}
+		//要考虑A和2的关系,A的rank是14，实际A和2也是连长
+		if k.HandCard[0].Suit == k.HandCard[1].Suit && k.HandCard[0].Rank == k.HandCard[1].Rank+1 || (k.HandCard[0].Rank == 14 && k.HandCard[1].Rank == 2 && k.HandCard[0].Suit == k.HandCard[1].Suit) {
+			suitedConnectorCount += v
+		}
+		if k.HandCard[0].Suit == k.HandCard[1].Suit && (k.HandCard[0].Rank == 14 || k.HandCard[1].Rank == 14) {
+			suitedAceCount += v
+		}
+		if k.HandCard[0].Rank == 14 || k.HandCard[1].Rank == 14 {
+			aceCount += v
+		}
+		if k.HandCard[0].Rank >= 10 && k.HandCard[1].Rank >= 10 {
+			highCardCount += v
+		}
 	}
 
 	sort.Slice(sortedResults, func(i, j int) bool {
@@ -192,6 +224,47 @@ func ShuffleAndRecord(iterations int, filename string) {
 	for i := 0; i < 10 && i < len(sortedResults); i++ {
 		fmt.Printf("%s: %d\n", sortedResults[i].Key.HandCard[0].CardTranslate()+sortedResults[i].Key.HandCard[1].CardTranslate(), sortedResults[i].Value)
 	}
+
+	//口袋对出现的次数
+	fmt.Printf("Pair count: %d\n", pairCount)
+	pairCountPercent := fmt.Sprintf("%.4f%%", float64(pairCount)/float64(iterations)*100)
+	fmt.Println("Pair count:", pairCountPercent)
+	//同花出现次数
+	fmt.Printf("Suited  count: %d\n", suitedCount)
+	suitedCountPercent := fmt.Sprintf("%.4f%%", float64(suitedCount)/float64(iterations)*100)
+	fmt.Println("Suited count:", suitedCountPercent)
+	//同花连张出现次数
+	fmt.Printf("Suited connectors count: %d\n", suitedConnectorCount)
+	suitedConnectorCountPercent := fmt.Sprintf("%.4f%%", float64(suitedConnectorCount)/float64(iterations)*100)
+	fmt.Println("Suited connectors count:", suitedConnectorCountPercent)
+	//AXs出现的次数
+	fmt.Printf("Suited Ace count: %d\n", suitedAceCount)
+	suitedAceCountPercent := fmt.Sprintf("%.4f%%", float64(suitedAceCount)/float64(iterations)*100)
+	fmt.Println("Suited Ace count:", suitedAceCountPercent)
+	//AXo出现的次数
+	fmt.Printf("Ace high count: %d\n", aceCount)
+	aceCountPercent := fmt.Sprintf("%.4f%%", float64(aceCount)/float64(iterations)*100)
+	fmt.Println("Suited Ace count:", aceCountPercent)
+	//两张牌都大于等于10出现的次数
+	fmt.Printf("High cards count: %d\n", highCardCount)
+	highCardCountPercent := fmt.Sprintf("%.4f%%", float64(highCardCount)/float64(iterations)*100)
+	fmt.Println("High cards count:", highCardCountPercent)
+}
+
+func DealCards(New52CardList [52]Card, playersNumber int) (resHandCard []HandCard, resPublicCard []HandCard) {
+	// 初始化玩家手牌
+	resHandCard = make([]HandCard, playersNumber)
+
+	// 每个玩家分两张牌
+	for i := 0; i < playersNumber; i++ {
+		resHandCard[i] = HandCard{
+			HandCard: [2]Card{
+				New52CardList[i*2],
+				New52CardList[i*2+1],
+			},
+		}
+	}
+	return resHandCard, resHandCard
 }
 
 // Judge5From7 7选五的21种牌型的牌力
