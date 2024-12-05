@@ -289,20 +289,25 @@ func ShuffleAndRecord(iterations int, filename string) {
 	fmt.Println("High cards count:", highCardCountPercent)
 }
 
-func DealCards(New52CardList [52]Card, playersNumber int) (resHandCard []HandCard, resPublicCard []HandCard) {
+func DealCards(New52CardList [52]Card, playersNumber int) (resHandCard []HandCard, resPublicCard []Card) {
 	// 初始化玩家手牌
 	resHandCard = make([]HandCard, playersNumber)
+	resPublicCard = make([]Card, 5)
 
 	// 每个玩家分两张牌
-	for i := 0; i < playersNumber; i++ {
-		resHandCard[i] = HandCard{
-			HandCard: [2]Card{
-				New52CardList[i*2],
-				New52CardList[i*2+1],
-			},
-		}
+	for j := 1; j <= playersNumber; j++ {
+		resHandCard[j-1].HandCard[0] = New52CardList[j-1]
 	}
-	return resHandCard, resHandCard
+	for j := 1; j <= playersNumber; j++ {
+		resHandCard[j-1].HandCard[1] = New52CardList[playersNumber-1+j]
+	}
+	j := 0
+	for i := 1; i <= 5; i++ {
+		resPublicCard[j] = New52CardList[2*playersNumber-1+i]
+		j++
+	}
+
+	return resHandCard, resPublicCard
 }
 
 // Judge5From7 7选五的21种牌型的牌力

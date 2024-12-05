@@ -57,14 +57,19 @@ func Test_ShuffleAndRecord(t *testing.T) {
 func Test_DealCards(t *testing.T) {
 
 	res := ShuffleCard()
-	fmt.Println(res)
+	// fmt.Println(res)
 	for _, i := range res {
 		cardView := i.CardTranslate()
-		fmt.Println(cardView)
+		fmt.Print(cardView, " ")
 	}
 
-	res01, res02 := DealCards(res, 2)
-	fmt.Print(res01)
-	fmt.Print("--------")
-	fmt.Print(res02)
+	res01, res02 := DealCards(res, 5)
+	fmt.Println(len(res01))
+	for k, v := range res01 {
+		fmt.Println(k, v.HandCard[0].CardTranslate(), v.HandCard[1].CardTranslate())
+	}
+	fmt.Println("--------")
+	for _, v := range res02 {
+		fmt.Print(v.CardTranslate(), " ")
+	}
 }
