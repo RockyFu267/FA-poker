@@ -8,7 +8,7 @@ type Card struct {
 
 // CardRank 翻拍后玩家的最大牌行同级数组
 type CardRank struct {
-	Grade    int64   `json:"grade"`
+	Grade    int     `json:"grade"`
 	Value    [5]Card `json:"value"`
 	PlayName string  `json:"playName"`
 	Value7   [7]Card `json:"value7"`

@@ -33,6 +33,23 @@ func (p Card) CardTranslate() string {
 	return "fuck card"
 }
 
+// CardTranslate 转换卡牌rank的显示值
+func (p Card) CardRankTranslate() string {
+
+	ranks := map[int]string{
+		14: "A", 13: "K", 12: "Q", 11: "J",
+		10: "10", 9: "9", 8: "8", 7: "7",
+		6: "6", 5: "5", 4: "4", 3: "3", 2: "2",
+	}
+
+	rankSymbol, rankExists := ranks[p.Rank]
+
+	if rankExists {
+		return rankSymbol
+	}
+	return "fuck card"
+}
+
 // ShuffleCard 洗牌
 func ShuffleCard() (New52CardList [52]Card) {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -141,7 +158,7 @@ func compareSuits(suit1, suit2 string) bool {
 	return order[suit1] > order[suit2]
 }
 
-// ShuffleAndRecord 执行洗牌次，将所有组合以及频率放在一个map里并写入文件
+// ShuffleAndRecord 执行洗牌次，将所有组合以及频率放在一个map里并写入文件中。同时要将所有组合
 func ShuffleAndRecord(iterations int, filename string) {
 	results := make(map[HandCard]int)
 
@@ -197,6 +214,27 @@ func ShuffleAndRecord(iterations int, filename string) {
 		return sortedResults[i].Value < sortedResults[j].Value
 	})
 
+	//统计并打印所有两张牌大小一样的组合，忽略花色
+	pairMap := make(map[string]int)
+	//统计并打印所有两张牌suit相同的组合
+	suitMap := make(map[string]int)
+	//统计并打印所有两张牌suit不相同的组合，且rank不相同的组合
+	offsuitMap := make(map[string]int)
+	for k, _ := range results {
+		if k.HandCard[0].Rank == k.HandCard[1].Rank {
+			pairMap[k.HandCard[0].CardRankTranslate()+k.HandCard[1].CardRankTranslate()] = pairMap[k.HandCard[0].CardRankTranslate()+k.HandCard[1].CardRankTranslate()] + 1
+		}
+		if k.HandCard[0].Suit == k.HandCard[1].Suit {
+			suitMap[k.HandCard[0].CardRankTranslate()+k.HandCard[1].CardRankTranslate()+"s"] = suitMap[k.HandCard[0].CardRankTranslate()+k.HandCard[1].CardRankTranslate()+"s"] + 1
+		}
+		if k.HandCard[0].Suit != k.HandCard[1].Suit && k.HandCard[0].Rank != k.HandCard[1].Rank {
+			offsuitMap[k.HandCard[0].CardRankTranslate()+k.HandCard[1].CardRankTranslate()+"o"] = offsuitMap[k.HandCard[0].CardRankTranslate()+k.HandCard[1].CardRankTranslate()+"o"] + 1
+		}
+
+	}
+	fmt.Println("Two cards of the same list:", len(pairMap), "----\n", pairMap)
+	fmt.Println("Two cards of the same suit:", len(suitMap), "----\n", suitMap)
+	fmt.Println("Two cards of different suit:", len(offsuitMap), "----\n", offsuitMap)
 	// 将结果写入文件
 	file, err := os.Create(filename)
 	if err != nil {
@@ -309,14 +347,14 @@ func Judge5From7(CardArry7_5 [7]Card, PlayName string) (CardRankSlice []CardRank
 									MaxArr[1].Rank-MaxArr[2].Rank == 1 &&
 									MaxArr[2].Rank-MaxArr[3].Rank == 1 &&
 									MaxArr[3].Rank-MaxArr[4].Rank == 1) {
-								//如果是同花顺
+								//如果是同花顺  9
 								CardRanktest.Grade = 9
 								CardRanktest.Value = MaxArr
 								CardRanktest.PlayName = PlayName
 								CardRankSlice = append(CardRankSlice, CardRanktest)
 								// --debug//fmt.Println("straight flush")
 							} else {
-								//如果是同花
+								//如果是同花  6
 								CardRanktest.Grade = 6
 								CardRanktest.Value = MaxArr
 								CardRanktest.PlayName = PlayName
@@ -327,7 +365,7 @@ func Judge5From7(CardArry7_5 [7]Card, PlayName string) (CardRankSlice []CardRank
 							//判断是否是金刚
 							if (MaxArr[0].Rank == MaxArr[3].Rank) ||
 								(MaxArr[1].Rank == MaxArr[4].Rank) {
-								//如果是金刚
+								//如果是金刚 8
 								//判断重组金刚数组的顺序 保证前四个为相等的值，最后的值为单值
 								if MaxArr[1].Rank == MaxArr[4].Rank {
 									CardRanktest.Grade = 8
@@ -346,7 +384,7 @@ func Judge5From7(CardArry7_5 [7]Card, PlayName string) (CardRankSlice []CardRank
 									// --debug//fmt.Println("KINGKONG")
 								}
 							} else {
-								//判断是否是葫芦
+								//判断是否是葫芦 7
 								if (MaxArr[0].Rank == MaxArr[2].Rank && MaxArr[3].Rank == MaxArr[4].Rank) ||
 									(MaxArr[0].Rank == MaxArr[1].Rank && MaxArr[2].Rank == MaxArr[4].Rank) {
 									//如果是葫芦
@@ -368,7 +406,7 @@ func Judge5From7(CardArry7_5 [7]Card, PlayName string) (CardRankSlice []CardRank
 										// --debug//fmt.Println("full house")
 									}
 								} else {
-									//判断是否是顺子
+									//判断是否是顺子 5
 									if (MaxArr[0].Rank-MaxArr[1].Rank == 1 &&
 										MaxArr[1].Rank-MaxArr[2].Rank == 1 &&
 										MaxArr[2].Rank-MaxArr[3].Rank == 1 &&
@@ -384,7 +422,7 @@ func Judge5From7(CardArry7_5 [7]Card, PlayName string) (CardRankSlice []CardRank
 										CardRankSlice = append(CardRankSlice, CardRanktest)
 										// --debug//fmt.Println("straight")
 									} else {
-										//判断是否是三条
+										//判断是否是三条 4
 										if (MaxArr[0].Rank == MaxArr[2].Rank) ||
 											(MaxArr[2].Rank == MaxArr[4].Rank) ||
 											(MaxArr[1].Rank == MaxArr[3].Rank) {
@@ -418,7 +456,7 @@ func Judge5From7(CardArry7_5 [7]Card, PlayName string) (CardRankSlice []CardRank
 												// --debug//fmt.Println("three of a kind")
 											}
 										} else {
-											//判断是否是两对
+											//判断是否是两对 3
 											if (MaxArr[0].Rank == MaxArr[1].Rank && MaxArr[2].Rank == MaxArr[3].Rank) ||
 												(MaxArr[1].Rank == MaxArr[2].Rank && MaxArr[3].Rank == MaxArr[4].Rank) ||
 												(MaxArr[0].Rank == MaxArr[1].Rank && MaxArr[3].Rank == MaxArr[4].Rank) {
@@ -452,7 +490,7 @@ func Judge5From7(CardArry7_5 [7]Card, PlayName string) (CardRankSlice []CardRank
 													// --debug//fmt.Println("two pair")
 												}
 											} else {
-												//判断是否是对子
+												//判断是否是对子 2
 												if MaxArr[0].Rank == MaxArr[1].Rank || MaxArr[1].Rank == MaxArr[2].Rank || MaxArr[2].Rank == MaxArr[3].Rank || MaxArr[3].Rank == MaxArr[4].Rank {
 													//如果是对子
 													//判断对子数组的顺序 保证前2个值为对子，最后三个值为从大到小单值
@@ -494,7 +532,7 @@ func Judge5From7(CardArry7_5 [7]Card, PlayName string) (CardRankSlice []CardRank
 														// --debug//fmt.Println("one pair")
 													}
 												} else {
-													//为高张
+													//为高张 1
 													CardRanktest.Grade = 1
 													CardRanktest.Value = MaxArr
 													CardRanktest.PlayName = PlayName
