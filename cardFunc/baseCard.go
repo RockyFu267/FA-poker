@@ -349,33 +349,30 @@ func CombineCardsDemo(playersHandCard []HandCard, publicCard []Card) (resHandCar
 // Judge5From7 7选五的21种牌型的牌力，高牌的牌力为0，对子的牌力为1，两对的牌力为2，三条的牌力为3，顺子的牌力为4，同花的牌力为5，葫芦的牌力为6，四条的牌力为7，同花顺的牌力为8
 func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 	//输入的7张牌，大小已经是按从大到小排列
-	//定义四个花色的map，用来统计花色出现的次数
-	suitMap := make(map[string]int)
-	//记录最长等差数列的长度
-	maxLen := 1
-	currentLen := 1
-	//记录最多大小相同的牌的长度
-	sameMap := make(map[int]int)
+
+	suitMap := make(map[string]int) //定义四个花色的map，用来统计花色出现的次数
+
+	maxLen := 1                  //记录最长等差数列的长度
+	currentLen := 1              //指定等差数列的长度
+	sameMap := make(map[int]int) //记录最多大小相同的牌的长度
 	//要先判断是不是同花，至少有5张是相同花色的
 	//先排除A2345的可能
 	for i := 0; i < 7; i++ {
-		//记录花色
-		suitMap[playersAllCard[i].Suit] = suitMap[playersAllCard[i].Suit] + 1
-		//记录大小相同的牌
-		sameMap[playersAllCard[i].Rank] = sameMap[playersAllCard[i].Rank] + 1
+		suitMap[playersAllCard[i].Suit] = suitMap[playersAllCard[i].Suit] + 1 //记录花色
+
+		sameMap[playersAllCard[i].Rank] = sameMap[playersAllCard[i].Rank] + 1 //记录大小相同的牌
 	}
-	//如果sameMap存在4张相同的牌，说明是四条
-	for k, v := range sameMap {
+
+	//4条
+	for k, v := range sameMap { //如果sameMap存在4张相同的牌，说明是四条
 		if v == 4 {
-			//debug 四条统计
-			fmt.Println("四条：", k, v)
-			//---
+			fmt.Println("四条：", k, v) //debug 四条统计
 
 			var MaxCard Card
-			//max截取信号
-			sign := false
-			//maxcard的下标
-			n := 0
+
+			sign := false //max截取信号
+
+			n := 0 //maxcard的下标
 			for i := 0; i < 7; i++ {
 				if playersAllCard[i].Rank != k && !sign { //不是4条的值就是最大值
 					MaxCard = playersAllCard[i]
@@ -386,18 +383,42 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 					n++
 				}
 			}
-			//4条外的最后一张牌
-			MaxCard5[4] = MaxCard
+
+			MaxCard5[4] = MaxCard //4条外的最后一张牌
 			return 7, MaxCard5
 		}
 	}
-	//如果sameMap存在2种3张相同的牌，或者存在3张相同的牌的同时还至少存在一个对子，说明是葫芦
-	count3 := 0
-	for _, freq := range sameMap {
-		if freq == 3 {
+	//葫芦
+	count3 := 0      //如果sameMap存在2种3张相同的牌，或者存在3张相同的牌的同时还至少存在一个对子，说明是葫芦
+	count3Value := 0 //葫芦里的3张相同的牌的值
+	count2Value := 0 //葫芦里的2张相同的牌的值
+	// card5sign := 0
+	for k, v := range sameMap {
+		if v == 3 { //发现有出现3次，可能一次可能2次
 			count3++
-			if count3 == 2 {
-				return 6, MaxCard5
+			if count3Value != 0 { //说明已经出现两次了,取最大值
+				if k > count3Value {
+					count2Value = count3Value //葫芦的2张相同的牌的值
+					count3Value = k           //葫芦的3张相同的牌的值
+				} else {
+					count2Value = k //葫芦的2张相同的牌的值 3张相同的牌的值不变
+				}
+				for i := 0; i < 7; i++ {
+					fmt.Println(playersAllCard[i].Rank, i, "debug") //debug
+					if playersAllCard[i].Rank == count3Value {
+						MaxCard5[0] = playersAllCard[i]
+						MaxCard5[1] = playersAllCard[i+1]
+						MaxCard5[2] = playersAllCard[i+2]
+						i = i + 2
+					}
+					if playersAllCard[i].Rank == count2Value {
+						MaxCard5[3] = playersAllCard[i]
+						MaxCard5[4] = playersAllCard[i+1]
+						return 6, MaxCard5
+					}
+				}
+			} else {
+				count3Value = k //葫芦的3张相同的牌的值
 			}
 		}
 
