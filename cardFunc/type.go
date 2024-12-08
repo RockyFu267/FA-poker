@@ -10,7 +10,7 @@ type Card struct {
 type CardRank struct {
 	Grade    int     `json:"grade"`
 	Value    [5]Card `json:"value"`
-	PlayName string  `json:"playName"`
+	PlayName string  `json:"playname"`
 	Value7   [7]Card `json:"value7"`
 }
 
@@ -19,4 +19,46 @@ type HandCard struct {
 	HandCard [2]Card `json:"handCard"`
 }
 
-//
+// TableSingle 牌桌
+type TableSingle struct {
+	ID               string         `json:"id"`
+	SitMax           int            `json:"sitmax"`
+	SitOn            int            `json:"siton"`
+	BigBlindSitNum   int            `json:"bigblindsitnum"`
+	SmallBlindSitNum int            `json:"smallblindsitnum"`
+	BigBlind         int            `json:"bigblind"`
+	SmallBlind       int            `json:"smallblind"`
+	DealingOrder     []int          `json:"dealingorder"`
+	Players          []Players      `json:"players"`
+	RoundHistory     []RoundHistory `json:"roundhistory"`
+	ChipSumMaxLimt   int            `json:"chipsummaxlimt"`
+	ChipSumMinLimt   int            `json:"chipsumminlimt"`
+}
+
+// Players 玩家
+type Players struct {
+	ID           string   `json:"id"`
+	Hand         HandCard `json:"hand"`
+	ChipSum      int64    `json:"chipsum"`
+	ChipBackHand int64    `json:"chipbackhand"`
+	BankRollSum  int64    `json:"bankrollsum"`
+	Card7        [7]Card  `json:"card7"`
+	Card5        [5]Card  `json:"card5"`
+	Grade        int      `json:"grade"`
+	TableNum     int      `json:"tablenum"`
+	Sitnum       int      `json:"sitnum"`
+	IsActive     bool     `json:"isactive"`
+	IsFold       bool     `json:"isfold"`
+	IsAllIn      bool     `json:"isallin"`
+}
+
+// RoundHistory	牌局历史
+type RoundHistory struct {
+	ID         string `json:"id"`
+	TableID    string `json:"tableid"`
+	Round      int    `json:"round"`
+	BigBlind   int    `json:"bigblind"`
+	SmallBlind int    `json:"smallblind"`
+	Dealer     int    `json:"dealer"`
+	Players    []Players
+}

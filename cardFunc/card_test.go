@@ -63,7 +63,7 @@ func Test_DealCards(t *testing.T) {
 		fmt.Print(cardView, " ")
 	}
 
-	res01, res02 := DealCards(res, 5)
+	res01, res02 := DealCards(res, 10)
 	fmt.Println(len(res01))
 	for k, v := range res01 {
 		fmt.Println(k, v.HandCard[0].CardTranslate(), v.HandCard[1].CardTranslate())
@@ -72,4 +72,41 @@ func Test_DealCards(t *testing.T) {
 	for _, v := range res02 {
 		fmt.Print(v.CardTranslate(), " ")
 	}
+}
+
+func Test_CombineCardsDemo(t *testing.T) {
+	// 1. 生成52张牌
+	res := ShuffleCard()
+	// fmt.Println(res)
+	for _, i := range res {
+		cardView := i.CardTranslate()
+		fmt.Print(cardView, " ")
+	}
+
+	res01, res02 := DealCards(res, 10)
+	combinations := CombineCardsDemo(res01, res02)
+	fmt.Println("\n所有组合的数量：", len(combinations))
+	for k, v := range combinations {
+		fmt.Print("\n组合", k, ":")
+		for _, card := range v {
+			fmt.Print(card.CardTranslate(), " ")
+		}
+	}
+
+}
+
+func Test_Judge5From7(t *testing.T) {
+	inputTest := [7]Card{
+		{Rank: 14, Suit: "黑桃"},
+		{Rank: 13, Suit: "红桃"},
+		{Rank: 10, Suit: "黑桃"},
+		{Rank: 5, Suit: "黑桃"},
+		{Rank: 4, Suit: "黑桃"},
+		{Rank: 3, Suit: "黑桃"},
+		{Rank: 2, Suit: "黑桃"},
+	}
+
+	res := Judge5From7(inputTest, "fuao")
+	fmt.Println(len(res))
+	fmt.Println(res[0])
 }

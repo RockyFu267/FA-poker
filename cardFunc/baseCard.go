@@ -289,10 +289,11 @@ func ShuffleAndRecord(iterations int, filename string) {
 	fmt.Println("High cards count:", highCardCountPercent)
 }
 
+// DealCards 发牌，返回玩家手牌和公共牌
 func DealCards(New52CardList [52]Card, playersNumber int) (resHandCard []HandCard, resPublicCard []Card) {
 	// 初始化玩家手牌
 	resHandCard = make([]HandCard, playersNumber)
-	resPublicCard = make([]Card, 5)
+	resPublicCard = make([]Card, 52-(playersNumber*2))
 
 	// 每个玩家分两张牌
 	for j := 1; j <= playersNumber; j++ {
@@ -302,12 +303,47 @@ func DealCards(New52CardList [52]Card, playersNumber int) (resHandCard []HandCar
 		resHandCard[j-1].HandCard[1] = New52CardList[playersNumber-1+j]
 	}
 	j := 0
-	for i := 1; i <= 5; i++ {
+	for i := 1; i <= 52-(playersNumber*2); i++ {
 		resPublicCard[j] = New52CardList[2*playersNumber-1+i]
 		j++
 	}
 
+	for i, k := range resHandCard {
+		k.sortTwoCards()
+		resHandCard[i] = k
+	}
 	return resHandCard, resPublicCard
+}
+
+// CombineCardsDemo 合成公共牌和所有玩家手牌的组合
+func CombineCardsDemo(playersHandCard []HandCard, publicCard []Card) (res [][]Card) {
+	n := len(playersHandCard)
+	// //debug
+	// fmt.Println("publicCard:", n)
+	// //---
+	// 初始化 res 切片，每个元素也是一个切片
+	res = make([][]Card, n)
+	for i := 0; i < n; i++ {
+		// 添加玩家的手牌
+		for j := 0; j < 2; j++ {
+			res[i] = append(res[i], playersHandCard[i].HandCard[j])
+		}
+		// 添加公共牌 这里默认5张
+		res[i] = append(res[i], publicCard[:5]...)
+	}
+	// 这7张再排序，从大到小，花色顺序按照 黑桃、红桃、梅花、方片的顺序
+	for i := 0; i < n; i++ {
+		for j := 0; j < 7; j++ {
+			for k := j + 1; k < 7; k++ {
+				if res[i][j].Rank < res[i][k].Rank {
+					temp := res[i][j]
+					res[i][j] = res[i][k]
+					res[i][k] = temp
+				}
+			}
+		}
+	}
+	return res
 }
 
 // Judge5From7 7选五的21种牌型的牌力
@@ -557,4 +593,13 @@ func Judge5From7(CardArry7_5 [7]Card, PlayName string) (CardRankSlice []CardRank
 		}
 	}
 	return CardRankSlice
+}
+
+// sortTwoCards 对两张手牌进行排序
+func (p *HandCard) sortTwoCards() {
+	if p.HandCard[0].Rank < p.HandCard[1].Rank ||
+		(p.HandCard[0].Rank == p.HandCard[1].Rank && compareSuits(p.HandCard[0].Suit, p.HandCard[1].Suit)) {
+		// 交换两张牌
+		p.HandCard[0], p.HandCard[1] = p.HandCard[1], p.HandCard[0]
+	}
 }
