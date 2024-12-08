@@ -316,283 +316,126 @@ func DealCards(New52CardList [52]Card, playersNumber int) (resHandCard []HandCar
 }
 
 // CombineCardsDemo 合成公共牌和所有玩家手牌的组合
-func CombineCardsDemo(playersHandCard []HandCard, publicCard []Card) (res [][]Card) {
+func CombineCardsDemo(playersHandCard []HandCard, publicCard []Card) (resHandCard [][]Card) {
 	n := len(playersHandCard)
 	// //debug
 	// fmt.Println("publicCard:", n)
 	// //---
 	// 初始化 res 切片，每个元素也是一个切片
-	res = make([][]Card, n)
+	resHandCard = make([][]Card, n)
 	for i := 0; i < n; i++ {
 		// 添加玩家的手牌
 		for j := 0; j < 2; j++ {
-			res[i] = append(res[i], playersHandCard[i].HandCard[j])
+			resHandCard[i] = append(resHandCard[i], playersHandCard[i].HandCard[j])
 		}
 		// 添加公共牌 这里默认5张
-		res[i] = append(res[i], publicCard[:5]...)
+		resHandCard[i] = append(resHandCard[i], publicCard[:5]...)
 	}
 	// 这7张再排序，从大到小，花色顺序按照 黑桃、红桃、梅花、方片的顺序
 	for i := 0; i < n; i++ {
 		for j := 0; j < 7; j++ {
 			for k := j + 1; k < 7; k++ {
-				if res[i][j].Rank < res[i][k].Rank {
-					temp := res[i][j]
-					res[i][j] = res[i][k]
-					res[i][k] = temp
+				if resHandCard[i][j].Rank < resHandCard[i][k].Rank {
+					temp := resHandCard[i][j]
+					resHandCard[i][j] = resHandCard[i][k]
+					resHandCard[i][k] = temp
 				}
 			}
 		}
 	}
-	return res
+	return resHandCard
 }
 
-// Judge5From7 7选五的21种牌型的牌力
-func Judge5From7(CardArry7_5 [7]Card, PlayName string) (CardRankSlice []CardRank) {
-	var CardRanktest CardRank
-	var ii, j, k, l, m int64
-	var iii, jjj int64
-	var MaxArr [5]Card
-	var temp Card
-	for ii = 0; ii <= 2; ii++ {
-		for j = ii + 1; j <= 3; j++ {
-			for k = j + 1; k <= 4; k++ {
-				for l = k + 1; l <= 5; l++ {
-					for m = l + 1; m <= 6; m++ {
-						// fmt.Println(CardArry7_5[ii], CardArry7_5[j], CardArry7_5[k], CardArry7_5[l], CardArry7_5[m])
-						MaxArr[0] = CardArry7_5[ii]
-						MaxArr[1] = CardArry7_5[j]
-						MaxArr[2] = CardArry7_5[k]
-						MaxArr[3] = CardArry7_5[l]
-						MaxArr[4] = CardArry7_5[m]
-						for iii = 0; iii < 4; iii++ {
-							for jjj = 0; jjj < 4; jjj++ {
-								if MaxArr[jjj].Rank < MaxArr[jjj+1].Rank {
-									temp = MaxArr[jjj+1]
-									MaxArr[jjj+1] = MaxArr[jjj]
-									MaxArr[jjj] = temp
-								}
-							}
-						}
-						// --debug//fmt.Println(MaxArr)
-						//判断是否是同花
-						if MaxArr[0].Suit == MaxArr[1].Suit &&
-							MaxArr[0].Suit == MaxArr[2].Suit &&
-							MaxArr[0].Suit == MaxArr[3].Suit &&
-							MaxArr[0].Suit == MaxArr[4].Suit {
-							//判断是否是同花顺
-							if (MaxArr[0].Rank-MaxArr[1].Rank == 1 &&
-								MaxArr[1].Rank-MaxArr[2].Rank == 1 &&
-								MaxArr[2].Rank-MaxArr[3].Rank == 1 &&
-								MaxArr[3].Rank-MaxArr[4].Rank == 1) ||
-								(MaxArr[0].Rank-MaxArr[1].Rank == 9 &&
-									MaxArr[1].Rank-MaxArr[2].Rank == 1 &&
-									MaxArr[2].Rank-MaxArr[3].Rank == 1 &&
-									MaxArr[3].Rank-MaxArr[4].Rank == 1) {
-								//如果是同花顺  9
-								CardRanktest.Grade = 9
-								CardRanktest.Value = MaxArr
-								CardRanktest.PlayName = PlayName
-								CardRankSlice = append(CardRankSlice, CardRanktest)
-								// --debug//fmt.Println("straight flush")
-							} else {
-								//如果是同花  6
-								CardRanktest.Grade = 6
-								CardRanktest.Value = MaxArr
-								CardRanktest.PlayName = PlayName
-								CardRankSlice = append(CardRankSlice, CardRanktest)
-								// --debug//fmt.Println("flush")
-							}
-						} else {
-							//判断是否是金刚
-							if (MaxArr[0].Rank == MaxArr[3].Rank) ||
-								(MaxArr[1].Rank == MaxArr[4].Rank) {
-								//如果是金刚 8
-								//判断重组金刚数组的顺序 保证前四个为相等的值，最后的值为单值
-								if MaxArr[1].Rank == MaxArr[4].Rank {
-									CardRanktest.Grade = 8
-									CardRanktest.Value[4] = MaxArr[0]
-									CardRanktest.Value[0] = MaxArr[1]
-									CardRanktest.Value[1] = MaxArr[2]
-									CardRanktest.Value[2] = MaxArr[3]
-									CardRanktest.Value[3] = MaxArr[4]
-									CardRanktest.PlayName = PlayName
-									CardRankSlice = append(CardRankSlice, CardRanktest)
-								} else {
-									CardRanktest.Grade = 8
-									CardRanktest.Value = MaxArr
-									CardRanktest.PlayName = PlayName
-									CardRankSlice = append(CardRankSlice, CardRanktest)
-									// --debug//fmt.Println("KINGKONG")
-								}
-							} else {
-								//判断是否是葫芦 7
-								if (MaxArr[0].Rank == MaxArr[2].Rank && MaxArr[3].Rank == MaxArr[4].Rank) ||
-									(MaxArr[0].Rank == MaxArr[1].Rank && MaxArr[2].Rank == MaxArr[4].Rank) {
-									//如果是葫芦
-									//判断三条数组的顺序 保证前三个值相等，后两个值为相等得对子
-									if MaxArr[0].Rank == MaxArr[1].Rank && MaxArr[2].Rank == MaxArr[4].Rank {
-										CardRanktest.Grade = 7
-										CardRanktest.Value[0] = MaxArr[2]
-										CardRanktest.Value[1] = MaxArr[3]
-										CardRanktest.Value[2] = MaxArr[4]
-										CardRanktest.Value[3] = MaxArr[0]
-										CardRanktest.Value[4] = MaxArr[1]
-										CardRanktest.PlayName = PlayName
-										CardRankSlice = append(CardRankSlice, CardRanktest)
-									} else {
-										CardRanktest.Grade = 7
-										CardRanktest.Value = MaxArr
-										CardRanktest.PlayName = PlayName
-										CardRankSlice = append(CardRankSlice, CardRanktest)
-										// --debug//fmt.Println("full house")
-									}
-								} else {
-									//判断是否是顺子 5
-									if (MaxArr[0].Rank-MaxArr[1].Rank == 1 &&
-										MaxArr[1].Rank-MaxArr[2].Rank == 1 &&
-										MaxArr[2].Rank-MaxArr[3].Rank == 1 &&
-										MaxArr[3].Rank-MaxArr[4].Rank == 1) ||
-										(MaxArr[0].Rank-MaxArr[1].Rank == 9 &&
-											MaxArr[1].Rank-MaxArr[2].Rank == 1 &&
-											MaxArr[2].Rank-MaxArr[3].Rank == 1 &&
-											MaxArr[3].Rank-MaxArr[4].Rank == 1) {
-										//如果是顺子
-										CardRanktest.Grade = 5
-										CardRanktest.Value = MaxArr
-										CardRanktest.PlayName = PlayName
-										CardRankSlice = append(CardRankSlice, CardRanktest)
-										// --debug//fmt.Println("straight")
-									} else {
-										//判断是否是三条 4
-										if (MaxArr[0].Rank == MaxArr[2].Rank) ||
-											(MaxArr[2].Rank == MaxArr[4].Rank) ||
-											(MaxArr[1].Rank == MaxArr[3].Rank) {
-											//如果是三条
-											//判断三条数组的顺序 保证前三个值相等，后两个值为大小顺序的单值
-											if MaxArr[2].Rank == MaxArr[4].Rank {
-												CardRanktest.Grade = 4
-												CardRanktest.Value[0] = MaxArr[2]
-												CardRanktest.Value[1] = MaxArr[3]
-												CardRanktest.Value[2] = MaxArr[4]
-												CardRanktest.Value[3] = MaxArr[0]
-												CardRanktest.Value[4] = MaxArr[1]
-												CardRanktest.PlayName = PlayName
-												CardRankSlice = append(CardRankSlice, CardRanktest)
-											}
-											if MaxArr[1].Rank == MaxArr[3].Rank {
-												CardRanktest.Grade = 4
-												CardRanktest.Value[0] = MaxArr[1]
-												CardRanktest.Value[1] = MaxArr[2]
-												CardRanktest.Value[2] = MaxArr[3]
-												CardRanktest.Value[3] = MaxArr[0]
-												CardRanktest.Value[4] = MaxArr[4]
-												CardRanktest.PlayName = PlayName
-												CardRankSlice = append(CardRankSlice, CardRanktest)
-											}
-											if MaxArr[0].Rank == MaxArr[2].Rank {
-												CardRanktest.Grade = 4
-												CardRanktest.Value = MaxArr
-												CardRanktest.PlayName = PlayName
-												CardRankSlice = append(CardRankSlice, CardRanktest)
-												// --debug//fmt.Println("three of a kind")
-											}
-										} else {
-											//判断是否是两对 3
-											if (MaxArr[0].Rank == MaxArr[1].Rank && MaxArr[2].Rank == MaxArr[3].Rank) ||
-												(MaxArr[1].Rank == MaxArr[2].Rank && MaxArr[3].Rank == MaxArr[4].Rank) ||
-												(MaxArr[0].Rank == MaxArr[1].Rank && MaxArr[3].Rank == MaxArr[4].Rank) {
-												//如果是两对
-												//判断两对数组的顺序 保证前四个值为从大到小的对子，最后一个值为单值
-												if MaxArr[1].Rank == MaxArr[2].Rank && MaxArr[3].Rank == MaxArr[4].Rank {
-													CardRanktest.Grade = 3
-													CardRanktest.Value[0] = MaxArr[1]
-													CardRanktest.Value[1] = MaxArr[2]
-													CardRanktest.Value[2] = MaxArr[3]
-													CardRanktest.Value[3] = MaxArr[4]
-													CardRanktest.Value[4] = MaxArr[0]
-													CardRanktest.PlayName = PlayName
-													CardRankSlice = append(CardRankSlice, CardRanktest)
-												}
-												if MaxArr[0].Rank == MaxArr[1].Rank && MaxArr[3].Rank == MaxArr[4].Rank {
-													CardRanktest.Grade = 3
-													CardRanktest.Value[0] = MaxArr[0]
-													CardRanktest.Value[1] = MaxArr[1]
-													CardRanktest.Value[2] = MaxArr[3]
-													CardRanktest.Value[3] = MaxArr[4]
-													CardRanktest.Value[4] = MaxArr[2]
-													CardRanktest.PlayName = PlayName
-													CardRankSlice = append(CardRankSlice, CardRanktest)
-												}
-												if MaxArr[0].Rank == MaxArr[1].Rank && MaxArr[2].Rank == MaxArr[3].Rank {
-													CardRanktest.Grade = 3
-													CardRanktest.Value = MaxArr
-													CardRanktest.PlayName = PlayName
-													CardRankSlice = append(CardRankSlice, CardRanktest)
-													// --debug//fmt.Println("two pair")
-												}
-											} else {
-												//判断是否是对子 2
-												if MaxArr[0].Rank == MaxArr[1].Rank || MaxArr[1].Rank == MaxArr[2].Rank || MaxArr[2].Rank == MaxArr[3].Rank || MaxArr[3].Rank == MaxArr[4].Rank {
-													//如果是对子
-													//判断对子数组的顺序 保证前2个值为对子，最后三个值为从大到小单值
-													if MaxArr[1].Rank == MaxArr[2].Rank {
-														CardRanktest.Grade = 2
-														CardRanktest.Value[0] = MaxArr[1]
-														CardRanktest.Value[1] = MaxArr[2]
-														CardRanktest.Value[2] = MaxArr[0]
-														CardRanktest.Value[3] = MaxArr[3]
-														CardRanktest.Value[4] = MaxArr[4]
-														CardRanktest.PlayName = PlayName
-														CardRankSlice = append(CardRankSlice, CardRanktest)
-													}
-													if MaxArr[2].Rank == MaxArr[3].Rank {
-														CardRanktest.Grade = 2
-														CardRanktest.Value[0] = MaxArr[2]
-														CardRanktest.Value[1] = MaxArr[3]
-														CardRanktest.Value[2] = MaxArr[0]
-														CardRanktest.Value[3] = MaxArr[1]
-														CardRanktest.Value[4] = MaxArr[4]
-														CardRanktest.PlayName = PlayName
-														CardRankSlice = append(CardRankSlice, CardRanktest)
-													}
-													if MaxArr[3].Rank == MaxArr[4].Rank {
-														CardRanktest.Grade = 2
-														CardRanktest.Value[0] = MaxArr[3]
-														CardRanktest.Value[1] = MaxArr[4]
-														CardRanktest.Value[2] = MaxArr[0]
-														CardRanktest.Value[3] = MaxArr[1]
-														CardRanktest.Value[4] = MaxArr[2]
-														CardRanktest.PlayName = PlayName
-														CardRankSlice = append(CardRankSlice, CardRanktest)
-													}
-													if MaxArr[0].Rank == MaxArr[1].Rank {
-														CardRanktest.Grade = 2
-														CardRanktest.Value = MaxArr
-														CardRanktest.PlayName = PlayName
-														CardRankSlice = append(CardRankSlice, CardRanktest)
-														// --debug//fmt.Println("one pair")
-													}
-												} else {
-													//为高张 1
-													CardRanktest.Grade = 1
-													CardRanktest.Value = MaxArr
-													CardRanktest.PlayName = PlayName
-													CardRankSlice = append(CardRankSlice, CardRanktest)
-													// --debug//fmt.Println("high card")
-												}
-											}
-										}
+// Judge5From7 7选五的21种牌型的牌力，高牌的牌力为0，对子的牌力为1，两对的牌力为2，三条的牌力为3，顺子的牌力为4，同花的牌力为5，葫芦的牌力为6，四条的牌力为7，同花顺的牌力为8
+func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
+	//输入的7张牌，大小已经是按从大到小排列
+	//定义四个花色的map，用来统计花色出现的次数
+	suitMap := make(map[string]int)
+	//记录最长等差数列的长度
+	maxLen := 1
+	currentLen := 1
+	//记录最多大小相同的牌的长度
+	sameMap := make(map[int]int)
+	//要先判断是不是同花，至少有5张是相同花色的
+	//先排除A2345的可能
+	for i := 0; i < 7; i++ {
+		//记录花色
+		suitMap[playersAllCard[i].Suit] = suitMap[playersAllCard[i].Suit] + 1
+		//记录大小相同的牌
+		sameMap[playersAllCard[i].Rank] = sameMap[playersAllCard[i].Rank] + 1
+	}
+	//如果sameMap存在4张相同的牌，说明是四条
+	for k, v := range sameMap {
+		if v == 4 {
+			//debug 四条统计
+			fmt.Println("四条：", k, v)
+			//---
 
-									}
-								}
-							}
-						}
-					}
+			var MaxCard Card
+			//max截取信号
+			sign := false
+			//maxcard的下标
+			n := 0
+			for i := 0; i < 7; i++ {
+				if playersAllCard[i].Rank != k && !sign { //不是4条的值就是最大值
+					MaxCard = playersAllCard[i]
+					sign = true
+				}
+				if playersAllCard[i].Rank == k {
+					MaxCard5[n] = playersAllCard[i]
+					n++
 				}
 			}
+			//4条外的最后一张牌
+			MaxCard5[4] = MaxCard
+			return 7, MaxCard5
 		}
 	}
-	return CardRankSlice
+	//如果sameMap存在2种3张相同的牌，或者存在3张相同的牌的同时还至少存在一个对子，说明是葫芦
+	count3 := 0
+	for _, freq := range sameMap {
+		if freq == 3 {
+			count3++
+			if count3 == 2 {
+				return 6, MaxCard5
+			}
+		}
+
+	}
+	//判断是否有顺子，至少有5张是连续的
+	for k, v := range suitMap {
+		if v >= 5 {
+			//debug 同花统计
+			fmt.Println(k, v)
+			//
+			//判断是否是同花顺
+			for i := 0; i < 7; i++ {
+				if i >= 1 {
+					if playersAllCard[i-1].Rank-playersAllCard[i].Rank == 1 {
+						currentLen++
+					} else {
+						if currentLen > maxLen {
+							maxLen = currentLen
+						}
+						currentLen = 1
+					}
+				}
+			} //说明至少是个顺子
+			if maxLen >= 5 {
+				//debug 顺子统计
+				fmt.Println(maxLen)
+				//
+				return 8, MaxCard5
+			} else { //说明不是同花顺，不是顺子，返回同花
+				return 5, MaxCard5
+			}
+			//debug 花色统计
+			fmt.Println(suitMap)
+			//
+			return 0, MaxCard5
+		}
+	}
+	return 0, MaxCard5
 }
 
 // sortTwoCards 对两张手牌进行排序
@@ -602,4 +445,12 @@ func (p *HandCard) sortTwoCards() {
 		// 交换两张牌
 		p.HandCard[0], p.HandCard[1] = p.HandCard[1], p.HandCard[0]
 	}
+}
+
+// max 返回较大的数
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }

@@ -97,16 +97,25 @@ func Test_CombineCardsDemo(t *testing.T) {
 
 func Test_Judge5From7(t *testing.T) {
 	inputTest := [7]Card{
+		// //带A的同花顺
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "红桃"},
+		// {Rank: 10, Suit: "黑桃"},
+		// {Rank: 5, Suit: "黑桃"},
+		// {Rank: 4, Suit: "黑桃"},
+		// {Rank: 3, Suit: "黑桃"},
+		// {Rank: 2, Suit: "黑桃"},
+
 		{Rank: 14, Suit: "黑桃"},
-		{Rank: 13, Suit: "红桃"},
-		{Rank: 10, Suit: "黑桃"},
-		{Rank: 5, Suit: "黑桃"},
-		{Rank: 4, Suit: "黑桃"},
+		{Rank: 8, Suit: "黑桃"},
+		{Rank: 8, Suit: "红桃"},
+		{Rank: 8, Suit: "梅花"},
+		{Rank: 8, Suit: "方片"},
 		{Rank: 3, Suit: "黑桃"},
 		{Rank: 2, Suit: "黑桃"},
 	}
 
-	res := Judge5From7(inputTest, "fuao")
-	fmt.Println(len(res))
-	fmt.Println(res[0])
+	grade, card5 := Judge5From7(inputTest)
+	fmt.Println(grade)
+	fmt.Println(card5)
 }
