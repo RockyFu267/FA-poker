@@ -354,38 +354,22 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 	//	maxLen := 1                      //记录最长等差数列的长度
 	//	currentLen := 1                  //指定等差数列的长度
 	sameMap := make(map[int]int) //记录最多大小相同的牌的长度
-	var sameList [][3]int        //记录大小相同的牌的长度,0：rank，1：个数，2：首个index，按顺序排序,
 	//	pairMapList := make(map[int]int) //记录对子的数量
 
 	//要先判断是不是同花，至少有5张是相同花色的
 	//先排除A2345的可能
 	for i := 0; i < 7; i++ {
-		var sametemp [3]int
-		tempSing := false
 		suitMap[playersAllCard[i].Suit] = suitMap[playersAllCard[i].Suit] + 1 //记录花色
 		sameMap[playersAllCard[i].Rank] = sameMap[playersAllCard[i].Rank] + 1 //记录大小相同的牌
-		for k, v := range sameList {
-			if v[0] == playersAllCard[i].Rank {
-				sameList[k][1] = sameList[k][1] + 1
-				break
-			}
-		}
-		if !tempSing {
-			sametemp[0] = playersAllCard[i].Rank
-			sametemp[1] = 1
-			sametemp[2] = i
-			sameList = append(sameList, sametemp)
-		}
 	}
-	fmt.Println("debug:输出sameList", sameList) //debug 输出sameList
 	//根据map长度来判断大小
 	// switch len(sameMap) { //这种写法不适合后期做娱乐技能判定，标准先这样
-	switch len(sameList) { //这种写法不适合后期做娱乐技能判定，标准先这样
+	switch len(sameMap) { //这种写法不适合后期做娱乐技能判定，标准先这样
 	case 2: //只有可能是金刚
 		Grade = 7
 		Value4 := 0 //不需要1
-		for k, v := range sameList {
-			if v[0] == 4 {
+		for k, v := range sameMap {
+			if v == 4 {
 				Value4 = k
 			}
 		}
@@ -404,91 +388,109 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 		}
 		return Grade, MaxCard5
 	case 3: //可能是金刚也可能是葫芦  这种写法不适合后期做娱乐技能判定，标准先这样
-		count3 := 0      //有3个相同的牌出现，那一定不是金刚了，值大于2就一定是葫芦（3+3+1）
-		count2 := 0      //如果对子出现两次，那一定是葫芦（3+2+2）
-		count3Value := 0 //葫芦里的3张相同的牌的值
-		count2Value := 0 //葫芦里的2张相同的牌的值
-		for _, v := range sameList {
-			if v[0] == 3 {
+		count3 := 0 //有3个相同的牌出现，那一定不是金刚了，值大于2就一定是葫芦（3+3+1）
+		count2 := 0 //如果对子出现两次，那一定是葫芦（3+2+2）
+		for _, v := range sameMap {
+			if v == 3 {
 				count3 = count3 + 1
 				if count3 == 2 { //只有以下组合（3+3+1）
 					Grade = 6
-					for k, v := range sameList {
-						if v[0] == 3 {
-							MaxCard5[0] = playersAllCard[sameList[k][2]]
-							MaxCard5[1] = playersAllCard[sameList[k][2]+1]
-							MaxCard5[2] = playersAllCard[sameList[k][2]+2]
-							MaxCard5[3] = playersAllCard[sameList[k+1][2]]
-							MaxCard5[4] = playersAllCard[sameList[k+1][2]+1]
-							return Grade, MaxCard5
-						}
-					}
-				}
-			}
-			if v[0] == 2 { //只有以下组合（3+2+2）
-				count2 = count2 + 1
-				if count2 == 2 {
-					Grade = 6
-					for k, v := range sameList {
-						if v[0] == 3 {
-							MaxCard5[0] = playersAllCard[sameList[k][2]]
-							MaxCard5[1] = playersAllCard[sameList[k][2]+1]
-							MaxCard5[2] = playersAllCard[sameList[k][2]+2]
-							if count2Value == 0 { //如果葫芦中的对子还没赋值
-								continue
-							} else {
-								return Grade, MaxCard5
-							}
-						}
-						if v[0] == 2 && count2Value == 0 {
-							MaxCard5[3] = playersAllCard[sameList[k][2]]
-							MaxCard5[4] = playersAllCard[sameList[k][2]+1]
-							if count3Value == 0 { //如果葫芦中的3条还没赋值
-								continue
-							} else {
-								return Grade, MaxCard5
-							}
-						}
-					}
-				}
-
-			}
-			if v[0] == 4 { //如果有4个相同的牌，那一定是金刚 （4+2+1）
-				Grade = 7
-				endSign := false //是否结束的信号
-				for k, v := range sameList {
-					if v[0] == 4 { //金刚 4个赋值
-						if MaxCard5[4].Rank == 0 {
-							MaxCard5[0] = playersAllCard[sameList[k][2]]
-							MaxCard5[1] = playersAllCard[sameList[k][2]+1]
-							MaxCard5[2] = playersAllCard[sameList[k][2]+2]
-							MaxCard5[3] = playersAllCard[sameList[k][2]+3]
-							continue
-						}
-						MaxCard5[0] = playersAllCard[sameList[k][2]]
-						MaxCard5[1] = playersAllCard[sameList[k][2]+1]
-						MaxCard5[2] = playersAllCard[sameList[k][2]+2]
-						MaxCard5[3] = playersAllCard[sameList[k][2]+3]
+					if playersAllCard[0].Rank == playersAllCard[2].Rank && playersAllCard[3].Rank == playersAllCard[4].Rank { //3+3+1
+						MaxCard5[0] = playersAllCard[0]
+						MaxCard5[1] = playersAllCard[1]
+						MaxCard5[2] = playersAllCard[2]
+						MaxCard5[3] = playersAllCard[3]
+						MaxCard5[4] = playersAllCard[4]
 						return Grade, MaxCard5
-					} else {
-						if MaxCard5[0].Rank == 0 && !endSign {
-							MaxCard5[4] = playersAllCard[sameList[k][2]]
-							endSign = true
-							continue
-						}
-						if MaxCard5[0].Rank != 0 && endSign {
-							MaxCard5[4] = playersAllCard[sameList[k][2]]
-							return Grade, MaxCard5
-						}
-
 					}
+					if playersAllCard[0].Rank == playersAllCard[2].Rank && playersAllCard[4].Rank == playersAllCard[6].Rank { //3+1+3
+						MaxCard5[0] = playersAllCard[0]
+						MaxCard5[1] = playersAllCard[1]
+						MaxCard5[2] = playersAllCard[2]
+						MaxCard5[3] = playersAllCard[4]
+						MaxCard5[4] = playersAllCard[5]
+						return Grade, MaxCard5
+					} else { //1+3+3
+						MaxCard5[0] = playersAllCard[1]
+						MaxCard5[1] = playersAllCard[2]
+						MaxCard5[2] = playersAllCard[3]
+						MaxCard5[3] = playersAllCard[4]
+						MaxCard5[4] = playersAllCard[5]
+						return Grade, MaxCard5
+					}
+				}
+			}
+			if v == 2 {
+				count2 = count2 + 1
+				if count2 == 2 { //只有以下组合（3+2+2）
+					Grade = 6
+					if playersAllCard[0].Rank == playersAllCard[2].Rank { //322
+						MaxCard5[0] = playersAllCard[0]
+						MaxCard5[1] = playersAllCard[1]
+						MaxCard5[2] = playersAllCard[2]
+						MaxCard5[3] = playersAllCard[3]
+						MaxCard5[4] = playersAllCard[4]
+						return Grade, MaxCard5
+					}
+					if playersAllCard[2].Rank == playersAllCard[4].Rank { //232
+						MaxCard5[0] = playersAllCard[2]
+						MaxCard5[1] = playersAllCard[3]
+						MaxCard5[2] = playersAllCard[4]
+						MaxCard5[3] = playersAllCard[0]
+						MaxCard5[4] = playersAllCard[1]
+						return Grade, MaxCard5
+					} else { //223  playersAllCard[4].Rank == playersAllCard[6].Rank
+						MaxCard5[0] = playersAllCard[4]
+						MaxCard5[1] = playersAllCard[5]
+						MaxCard5[2] = playersAllCard[6]
+						MaxCard5[3] = playersAllCard[0]
+						MaxCard5[4] = playersAllCard[1]
+						return Grade, MaxCard5
+					}
+				}
+
+			}
+			if v == 4 { //如果有4个相同的牌，那一定是金刚 （4+2+1）
+				Grade = 7
+				if playersAllCard[0].Rank == playersAllCard[3].Rank { //4+ 2+1或1+2
+					MaxCard5[0] = playersAllCard[0]
+					MaxCard5[1] = playersAllCard[1]
+					MaxCard5[2] = playersAllCard[2]
+					MaxCard5[3] = playersAllCard[3]
+					MaxCard5[4] = playersAllCard[4]
+					return Grade, MaxCard5
+				}
+				if playersAllCard[1].Rank == playersAllCard[4].Rank { //1+4+2
+					MaxCard5[0] = playersAllCard[1]
+					MaxCard5[1] = playersAllCard[2]
+					MaxCard5[2] = playersAllCard[3]
+					MaxCard5[3] = playersAllCard[4]
+					MaxCard5[4] = playersAllCard[0]
+					return Grade, MaxCard5
+				}
+				if playersAllCard[2].Rank == playersAllCard[5].Rank { //2+4+1
+					MaxCard5[0] = playersAllCard[2]
+					MaxCard5[1] = playersAllCard[3]
+					MaxCard5[2] = playersAllCard[4]
+					MaxCard5[3] = playersAllCard[5]
+					MaxCard5[4] = playersAllCard[0]
+					return Grade, MaxCard5
+				} else { //1+2或2+1 +4
+					MaxCard5[0] = playersAllCard[3]
+					MaxCard5[1] = playersAllCard[4]
+					MaxCard5[2] = playersAllCard[5]
+					MaxCard5[3] = playersAllCard[6]
+					MaxCard5[4] = playersAllCard[0]
+					return Grade, MaxCard5
 				}
 
 			}
 
 		}
-
+	case 4: //可能是金刚也可能是葫芦 也可能是两对  这种写法不适合后期做娱乐技能判定，标准先这样
+		count2 := 0 //如果对子出现3次，那一定是2对 2+2+2
 	}
+
 	return 0, MaxCard5
 }
 
