@@ -121,7 +121,23 @@ func Test_Judge5From7(t *testing.T) {
 		// {Rank: 8, Suit: "方片"},
 		// {Rank: 3, Suit: "黑桃"},
 		// {Rank: 2, Suit: "黑桃"},
-		// // 葫芦用例1 33
+		// // //4条用例3 4+3
+		{Rank: 9, Suit: "黑桃"},
+		{Rank: 9, Suit: "红桃"},
+		{Rank: 9, Suit: "梅花"},
+		{Rank: 9, Suit: "方片"},
+		{Rank: 7, Suit: "黑桃"},
+		{Rank: 7, Suit: "红桃"},
+		{Rank: 7, Suit: "梅花"},
+		// // //4条用例4 4+3
+		// {Rank: 7, Suit: "黑桃"},
+		// {Rank: 7, Suit: "红桃"},
+		// {Rank: 7, Suit: "梅花"},
+		// {Rank: 6, Suit: "黑桃"},
+		// {Rank: 6, Suit: "红桃"},
+		// {Rank: 6, Suit: "梅花"},
+		// {Rank: 6, Suit: "方片"},
+		// // 葫芦33 用例1
 		// {Rank: 14, Suit: "黑桃"},
 		// {Rank: 14, Suit: "红桃"},
 		// {Rank: 14, Suit: "梅花"},
@@ -129,7 +145,7 @@ func Test_Judge5From7(t *testing.T) {
 		// {Rank: 13, Suit: "红桃"},
 		// {Rank: 13, Suit: "方片"},
 		// {Rank: 2, Suit: "黑桃"},
-		// // 葫芦用例2 33
+		// // 葫芦33 用例2
 		// {Rank: 14, Suit: "黑桃"},
 		// {Rank: 13, Suit: "红桃"},
 		// {Rank: 13, Suit: "梅花"},
@@ -137,12 +153,20 @@ func Test_Judge5From7(t *testing.T) {
 		// {Rank: 12, Suit: "红桃"},
 		// {Rank: 12, Suit: "方片"},
 		// {Rank: 12, Suit: "梅花"},
-		// 葫芦用例3 33
+		// 葫芦33 用例3
 		// {Rank: 14, Suit: "黑桃"},
 		// {Rank: 14, Suit: "红桃"},
 		// {Rank: 14, Suit: "梅花"},
 		// {Rank: 13, Suit: "黑桃"},
 		// {Rank: 12, Suit: "红桃"},
+		// {Rank: 12, Suit: "方片"},
+		// {Rank: 12, Suit: "梅花"},
+		// // 葫芦32 用例1
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 14, Suit: "红桃"},
+		// {Rank: 14, Suit: "梅花"},
+		// {Rank: 13, Suit: "黑桃"},
+		// {Rank: 13, Suit: "红桃"},
 		// {Rank: 12, Suit: "方片"},
 		// {Rank: 12, Suit: "梅花"},
 	}
