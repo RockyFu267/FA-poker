@@ -615,7 +615,7 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 					j++
 					continue
 				}
-				if playersAllCard[i].Rank-MaxCard5[j-1].Rank == 1 {
+				if MaxCard5[j-1].Rank-playersAllCard[i].Rank == 1 {
 					MaxCard5[j] = playersAllCard[i]
 					j++
 					continue
