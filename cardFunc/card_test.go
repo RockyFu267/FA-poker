@@ -427,6 +427,46 @@ func Test_Judge5From7(t *testing.T) {
 		// {Rank: 4, Suit: "黑桃"},
 		// {Rank: 3, Suit: "黑桃"},
 		// {Rank: 2, Suit: "黑桃"},
+		//同花 用例1 长度5 A+B+C+D+EEE
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "黑桃"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 11, Suit: "黑桃"},
+		// {Rank: 9, Suit: "黑桃"},
+		// {Rank: 9, Suit: "红桃"},
+		// {Rank: 9, Suit: "方片"},
+		// 同花 用例2 长度5 A+B+C+DDD+E
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "黑桃"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 11, Suit: "黑桃"},
+		// {Rank: 11, Suit: "红桃"},
+		// {Rank: 11, Suit: "方片"},
+		// {Rank: 9, Suit: "黑桃"},
+		//同花 用例3 长度5 A+B+CCC+D+E
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "黑桃"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 12, Suit: "红桃"},
+		// {Rank: 12, Suit: "方片"},
+		// {Rank: 11, Suit: "黑桃"},
+		// {Rank: 9, Suit: "黑桃"},
+		//同花 用例4 长度5 A+BBB+C+D+E
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "黑桃"},
+		// {Rank: 13, Suit: "红桃"},
+		// {Rank: 13, Suit: "方片"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 11, Suit: "黑桃"},
+		// {Rank: 9, Suit: "黑桃"},
+		//同花 用例5 长度5 AAA+B+C+D+E
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 14, Suit: "红桃"},
+		// {Rank: 14, Suit: "方片"},
+		// {Rank: 13, Suit: "黑桃"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 11, Suit: "黑桃"},
+		// {Rank: 9, Suit: "黑桃"},
 	}
 
 	grade, card5 := Judge5From7(inputTest)
