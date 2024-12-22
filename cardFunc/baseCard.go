@@ -346,12 +346,8 @@ func CombineCardsDemo(playersHandCard []HandCard, publicCard []Card) (resHandCar
 // Judge5From7 7选五的21种牌型的牌力，高牌的牌力为0，对子的牌力为1，两对的牌力为2，三条的牌力为3，顺子的牌力为4，同花的牌力为5，葫芦的牌力为6，四条的牌力为7，同花顺的牌力为8
 func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 	//输入的7张牌，大小已经是按从大到小排列
-
 	suitMap := make(map[string]int) //定义四个花色的map，用来统计花色出现的次数
-	//	maxLen := 1                      //记录最长等差数列的长度
-	//	currentLen := 1                  //指定等差数列的长度
-	sameMap := make(map[int]int) //记录最多大小相同的牌的长度
-	//	pairMapList := make(map[int]int) //记录对子的数量
+	sameMap := make(map[int]int)    //记录最多大小相同的牌的长度
 
 	//要先判断是不是同花，至少有5张是相同花色的
 	//先排除A2345的可能
@@ -518,7 +514,6 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 					}
 				}
 				return Grade, MaxCard5
-
 			}
 			if v == 2 {
 				count2Value = k //用于记录葫芦中的唯一对子
@@ -571,9 +566,137 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 			}
 		}
 		return Grade, MaxCard5
+	case 5:
+		straighACEtoFive := false
+		straighACEtoFive = containsStraightKeys(sameMap)
+		for k, v := range suitMap { //判断是否有同花，可能是同花、同花顺
+			if v == 5 { //有同花
+				if playersAllCard[0].Rank-playersAllCard[6].Rank == 4 { //同花顺，但不包括5432A的牌型
+					Grade = 8
+					j := 0 //maxCard5的下标
+					for i := 0; i < 7; i++ {
+						if playersAllCard[i].Suit == k {
+							MaxCard5[j] = playersAllCard[i]
+							j++
+						}
+					}
+					return Grade, MaxCard5
+				}
+				if straighACEtoFive { //同花顺 指定牌型 5432A的牌型
+					Grade = 8
+					j := 0 //maxCard5的下标
+					for i := 0; i < 7; i++ {
+						if playersAllCard[i].Suit == k {
+							MaxCard5[j] = playersAllCard[i] //顺序还要调整 现在是A5432
+							j++
+						}
+					}
+					MaxCard5[0], MaxCard5[1], MaxCard5[2], MaxCard5[3], MaxCard5[4] = MaxCard5[1], MaxCard5[2], MaxCard5[3], MaxCard5[4], MaxCard5[0] //调整顺序
+					return Grade, MaxCard5
+				} else { //没有同花顺的可能，就是同花
+					Grade = 5
+					j := 0 //maxCard5的下标
+					for i := 0; i < 7; i++ {
+						if playersAllCard[i].Suit == k {
+							MaxCard5[j] = playersAllCard[i]
+							j++
+						}
+					}
+					return Grade, MaxCard5
+				}
+			}
+		}
+		if playersAllCard[0].Rank-playersAllCard[6].Rank == 4 { //没有同花的可能，可能是顺子，不包含5432A的牌型
+			Grade = 4
+			j := 0 //maxCard5的下标
+			for i := 0; i < 7; i++ {
+				if i == 0 { //第一个直接赋值 仅适用same长度为5的牌型
+					MaxCard5[j] = playersAllCard[i]
+					j++
+					continue
+				}
+				if playersAllCard[i].Rank-MaxCard5[j-1].Rank == 1 {
+					MaxCard5[j] = playersAllCard[i]
+					j++
+					continue
+				}
+			}
+			return Grade, MaxCard5
+		}
+		if straighACEtoFive { //ace顺子 5432A
+			Grade = 4
+			for i := 0; i < 7; i++ {
+				if playersAllCard[i].Rank == 14 {
+					MaxCard5[4] = playersAllCard[i]
+					continue
+				}
+				if playersAllCard[i].Rank == 5 {
+					MaxCard5[0] = playersAllCard[i]
+					continue
+				}
+				if playersAllCard[i].Rank == 4 {
+					MaxCard5[1] = playersAllCard[i]
+					continue
+				}
+				if playersAllCard[i].Rank == 3 {
+					MaxCard5[2] = playersAllCard[i]
+					continue
+				}
+				if playersAllCard[i].Rank == 2 {
+					MaxCard5[3] = playersAllCard[i]
+					continue
+				}
+			}
+			return Grade, MaxCard5
+		} else { //只能是两对
+			Grade = 2
+			pariRank1 := 0
+			pariRank2 := 0
+			for k, v := range sameMap {
+				if v == 2 {
+					if pariRank1 == 0 {
+						pariRank1 = k
+						continue
+					}
+					pariRank2 = k
+					break
+				}
+			}
+			j := 0 //maxCard5的下标
+			maxCardSign := false
+			for i := 0; i < len(playersAllCard); i++ {
+				if playersAllCard[i].Rank == pariRank1 || playersAllCard[i].Rank == pariRank2 {
+					MaxCard5[j] = playersAllCard[i]
+					j++
+					continue
+				} else {
+					if !maxCardSign {
+						MaxCard5[4] = playersAllCard[i]
+						maxCardSign = true
+					}
+					continue
+				}
+			}
+			return Grade, MaxCard5
+		}
+	case 6:
+	case 7:
+	default:
 	}
 
 	return 0, MaxCard5
+}
+
+// containsStraightKeys 判断map中是否同时包含14, 2, 3, 4, 5的key
+func containsStraightKeys(cards map[int]int) bool {
+	requiredKeys := []int{14, 2, 3, 4, 5}
+
+	for _, key := range requiredKeys {
+		if _, exists := cards[key]; !exists {
+			return false
+		}
+	}
+	return true
 }
 
 // sortTwoCards 对两张手牌进行排序

@@ -339,16 +339,90 @@ func Test_Judge5From7(t *testing.T) {
 		// {Rank: 11, Suit: "黑桃"},
 		// {Rank: 11, Suit: "方片"},
 		// 2对 用例4 长度4  1+2+2+2
-		{Rank: 14, Suit: "黑桃"},
-		{Rank: 13, Suit: "黑桃"},
-		{Rank: 13, Suit: "红桃"},
-		{Rank: 12, Suit: "黑桃"},
-		{Rank: 12, Suit: "红桃"},
-		{Rank: 11, Suit: "黑桃"},
-		{Rank: 11, Suit: "方片"},
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "黑桃"},
+		// {Rank: 13, Suit: "红桃"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 12, Suit: "红桃"},
+		// {Rank: 11, Suit: "黑桃"},
+		// {Rank: 11, Suit: "方片"},
+		// 同花顺 用例1 长度5  A+B+C+D+EEE
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "黑桃"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 11, Suit: "黑桃"},
+		// {Rank: 10, Suit: "黑桃"},
+		// {Rank: 10, Suit: "红桃"},
+		// {Rank: 10, Suit: "方片"},
+		// 同花顺 用例2 长度5 A+B+C+DDD+E
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "黑桃"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 11, Suit: "黑桃"},
+		// {Rank: 11, Suit: "红桃"},
+		// {Rank: 11, Suit: "方片"},
+		// {Rank: 10, Suit: "黑桃"},
+		//同花顺 用例3 长度5 A+B+CCC+D+E
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "黑桃"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 12, Suit: "红桃"},
+		// {Rank: 12, Suit: "方片"},
+		// {Rank: 11, Suit: "黑桃"},
+		// {Rank: 10, Suit: "黑桃"},
+		//同花顺 用例4 长度5 A+BBB+C+D+E
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "黑桃"},
+		// {Rank: 13, Suit: "红桃"},
+		// {Rank: 13, Suit: "方片"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 11, Suit: "黑桃"},
+		// {Rank: 10, Suit: "黑桃"},
+		//同花顺 用例5 长度5 AAA+B+C+D+E
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "黑桃"},
+		// {Rank: 13, Suit: "红桃"},
+		// {Rank: 13, Suit: "方片"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 11, Suit: "黑桃"},
+		// {Rank: 10, Suit: "黑桃"},
 	}
 
 	grade, card5 := Judge5From7(inputTest)
 	fmt.Println(grade)
 	fmt.Println(card5)
+}
+
+func Test_containsStraightKeys(t *testing.T) {
+	// 测试包含所有必需键的情况
+	cards1 := map[int]int{
+		14: 1,
+		2:  2,
+		3:  3,
+		4:  4,
+		5:  5,
+		6:  6,
+		7:  7,
+		13: 1,
+	}
+
+	// 测试缺少一个必需键的情况
+	cards2 := map[int]int{
+		14: 1,
+		2:  2,
+		3:  3,
+		4:  4,
+	}
+
+	// 测试空地图的情况
+	cards3 := map[int]int{}
+
+	res01 := containsStraightKeys(cards1)
+	res02 := containsStraightKeys(cards2)
+	res03 := containsStraightKeys(cards3)
+
+	fmt.Println(res01)
+	fmt.Println(res02)
+	fmt.Println(res03)
+
 }
