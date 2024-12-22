@@ -348,16 +348,12 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 	//输入的7张牌，大小已经是按从大到小排列
 	suitMap := make(map[string]int) //定义四个花色的map，用来统计花色出现的次数
 	sameMap := make(map[int]int)    //记录最多大小相同的牌的长度
-
-	//要先判断是不是同花，至少有5张是相同花色的
-	//先排除A2345的可能
 	for i := 0; i < 7; i++ {
 		suitMap[playersAllCard[i].Suit] = suitMap[playersAllCard[i].Suit] + 1 //记录花色
 		sameMap[playersAllCard[i].Rank] = sameMap[playersAllCard[i].Rank] + 1 //记录大小相同的牌
 	}
 
 	//根据map长度来判断大小
-	// switch len(sameMap) { //这种写法不适合后期做娱乐技能判定，标准先这样
 	switch len(sameMap) { //这种写法不适合后期做娱乐技能判定，标准先这样
 	case 2: //只有可能是金刚
 		Grade = 7
@@ -566,7 +562,7 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 			}
 		}
 		return Grade, MaxCard5
-	case 5:
+	case 5: //可能是同花顺、同花、顺子、三条、两对
 		straighACEtoFive := false
 		straighACEtoFive = containsStraightKeys(sameMap)
 		for k, v := range suitMap { //判断是否有同花，可能是同花、同花顺
@@ -648,17 +644,21 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 				}
 			}
 			return Grade, MaxCard5
-		} else { //只能是两对
-			Grade = 2
+		} else { //只能是两对或者三条
 			pariRank1 := 0
 			pariRank2 := 0
 			for k, v := range sameMap {
-				if v == 2 {
+				if v == 2 { //只可能是两对
+					Grade = 2
 					if pariRank1 == 0 {
 						pariRank1 = k
 						continue
 					}
 					pariRank2 = k
+					break
+				}
+				if v == 3 { //只可能是三条
+					Grade = 6
 					break
 				}
 			}
@@ -679,7 +679,7 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 			}
 			return Grade, MaxCard5
 		}
-	case 6:
+	case 6: //可能是同花顺、同花、顺子、两对
 	case 7:
 	default:
 	}
