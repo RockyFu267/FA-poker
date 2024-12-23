@@ -647,6 +647,7 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 		} else { //只能是两对或者三条
 			pariRank1 := 0
 			pariRank2 := 0
+			cont3value := 0
 			for k, v := range sameMap {
 				if v == 2 { //只可能是两对
 					Grade = 2
@@ -659,8 +660,36 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 				}
 				if v == 3 { //只可能是三条
 					Grade = 6
+					cont3value = k
 					break
 				}
+			}
+			if cont3value != 0 { //只能是三条
+				Grade = 3
+				max1 := 0
+				max2 := 0
+				for i := 0; i < len(playersAllCard); i++ {
+					if playersAllCard[i].Rank == cont3value {
+						MaxCard5[0] = playersAllCard[i]
+						MaxCard5[1] = playersAllCard[i+1]
+						MaxCard5[2] = playersAllCard[i+2]
+						i = i + 2
+						continue
+					}
+					if max1 == 0 {
+						max1 = playersAllCard[i].Rank
+						MaxCard5[3] = playersAllCard[i]
+						continue
+					}
+					if max2 == 0 {
+						max2 = playersAllCard[i].Rank
+						MaxCard5[4] = playersAllCard[i]
+						continue
+					}
+				}
+
+				return Grade, MaxCard5
+
 			}
 			j := 0 //maxCard5的下标
 			maxCardSign := false
