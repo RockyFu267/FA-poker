@@ -346,11 +346,13 @@ func CombineCardsDemo(playersHandCard []HandCard, publicCard []Card) (resHandCar
 // Judge5From7 7选五的21种牌型的牌力，高牌的牌力为0，对子的牌力为1，两对的牌力为2，三条的牌力为3，顺子的牌力为4，同花的牌力为5，葫芦的牌力为6，四条的牌力为7，同花顺的牌力为8
 func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 	//输入的7张牌，大小已经是按从大到小排列
-	suitMap := make(map[string]int) //定义四个花色的map，用来统计花色出现的次数
-	sameMap := make(map[int]int)    //记录最多大小相同的牌的长度
+	suitMap := make(map[string]int)       //定义四个花色的map，用来统计花色出现的次数
+	suitListMap := make(map[string][]int) //定义四个花色的map，用来统计相同花色的rank
+	sameMap := make(map[int]int)          //记录最多大小相同的牌的长度
 	for i := 0; i < 7; i++ {
-		suitMap[playersAllCard[i].Suit] = suitMap[playersAllCard[i].Suit] + 1 //记录花色
-		sameMap[playersAllCard[i].Rank] = sameMap[playersAllCard[i].Rank] + 1 //记录大小相同的牌
+		suitMap[playersAllCard[i].Suit] = suitMap[playersAllCard[i].Suit] + 1                                     //记录花色
+		sameMap[playersAllCard[i].Rank] = sameMap[playersAllCard[i].Rank] + 1                                     //记录大小相同的牌
+		suitListMap[playersAllCard[i].Suit] = append(suitListMap[playersAllCard[i].Suit], playersAllCard[i].Rank) //记录相同花色的牌
 	}
 
 	//根据map长度来判断大小
@@ -621,25 +623,35 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 		}
 		if straighACEtoFive { //ace顺子 5432A
 			Grade = 4
+			acesign := false
+			fiveSign := false
+			fourSign := false
+			threeSign := false
+			twoSign := false
 			for i := 0; i < 7; i++ {
-				if playersAllCard[i].Rank == 14 {
+				if playersAllCard[i].Rank == 14 && !acesign {
 					MaxCard5[4] = playersAllCard[i]
+					acesign = true
 					continue
 				}
-				if playersAllCard[i].Rank == 5 {
+				if playersAllCard[i].Rank == 5 && !fiveSign {
 					MaxCard5[0] = playersAllCard[i]
+					fiveSign = true
 					continue
 				}
-				if playersAllCard[i].Rank == 4 {
+				if playersAllCard[i].Rank == 4 && !fourSign {
 					MaxCard5[1] = playersAllCard[i]
+					fourSign = true
 					continue
 				}
-				if playersAllCard[i].Rank == 3 {
+				if playersAllCard[i].Rank == 3 && !threeSign {
 					MaxCard5[2] = playersAllCard[i]
+					threeSign = true
 					continue
 				}
-				if playersAllCard[i].Rank == 2 {
+				if playersAllCard[i].Rank == 2 && !twoSign {
 					MaxCard5[3] = playersAllCard[i]
+					twoSign = true
 					continue
 				}
 			}
@@ -709,8 +721,230 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 			return Grade, MaxCard5
 		}
 	case 6: //可能是同花顺、同花、顺子、两对
-	case 7:
-	default:
+		straighACEtoFive := false
+		straighACEtoFive = containsStraightKeys(sameMap)
+		pairRank1 := 0
+		var templist []int
+		var tempList []int
+		for k, v := range sameMap {
+			templist = append(templist, k)
+			if v == 2 {
+				pairRank1 = k
+			}
+		}
+		sortDescending(templist)
+		tempList = templist
+		fmt.Println(templist) //debug
+		if templist[0]-templist[4] == 4 {
+			tempList = templist[:5]
+		}
+		if templist[1]-templist[5] == 4 && templist[0]-templist[4] != 4 {
+			tempList = templist[1:]
+		}
+
+		fmt.Println(tempList)           //debug
+		for k, v := range suitListMap { //判断是否有同花，可能是同花、同花顺
+			if len(v) == 6 { //有同花
+				if suitListMap[k][0]-suitListMap[k][4] == 4 { //同花顺，但不包括5432A的牌型
+					Grade = 8
+					for i := 0; i < 7; i++ {
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][0] {
+							MaxCard5[0] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][1] {
+							MaxCard5[1] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][2] {
+							MaxCard5[2] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][3] {
+							MaxCard5[3] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][4] {
+							MaxCard5[4] = playersAllCard[i]
+						}
+					}
+					return Grade, MaxCard5
+				}
+				if suitListMap[k][1]-suitListMap[k][5] == 4 { //同花顺，但不包括5432A的牌型
+					Grade = 8
+					for i := 0; i < 7; i++ {
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][1] {
+							MaxCard5[0] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][2] {
+							MaxCard5[1] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][3] {
+							MaxCard5[2] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][4] {
+							MaxCard5[3] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][5] {
+							MaxCard5[4] = playersAllCard[i]
+						}
+					}
+					return Grade, MaxCard5
+				}
+				if suitListMap[k][0] == 14 && suitListMap[k][2] == 5 && suitListMap[k][3] == 4 && suitListMap[k][4] == 3 && suitListMap[k][5] == 2 { //同花顺 指定牌型 5432A的牌型
+
+					Grade = 8
+					for i := 0; i < 7; i++ {
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][0] {
+							MaxCard5[4] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][2] {
+							MaxCard5[0] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][3] {
+							MaxCard5[1] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][4] {
+							MaxCard5[2] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][5] {
+							MaxCard5[3] = playersAllCard[i]
+						}
+					}
+					return Grade, MaxCard5
+				} else { //只是同花
+					Grade = 5
+					j := 0 //maxCard5的下标
+					for i := 0; i < 7; i++ {
+						if playersAllCard[i].Suit == k && j < 5 {
+							MaxCard5[j] = playersAllCard[i]
+							j++
+						}
+					}
+					return Grade, MaxCard5
+				}
+			}
+			if len(v) == 5 { //
+				if suitListMap[k][0]-suitListMap[k][4] == 4 { //同花顺，但不包括5432A的牌型
+					Grade = 8
+					for i := 0; i < 7; i++ {
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][0] {
+							MaxCard5[0] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][1] {
+							MaxCard5[1] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][2] {
+							MaxCard5[2] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][3] {
+							MaxCard5[3] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][4] {
+							MaxCard5[4] = playersAllCard[i]
+						}
+					}
+					return Grade, MaxCard5
+				}
+				if suitListMap[k][0] == 14 && suitListMap[k][1] == 5 && suitListMap[k][2] == 4 && suitListMap[k][3] == 3 && suitListMap[k][4] == 2 { //同花顺 指定牌型 5432A的牌型
+					Grade = 8
+					for i := 0; i < 7; i++ {
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][0] {
+							MaxCard5[4] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][1] {
+							MaxCard5[0] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][2] {
+							MaxCard5[1] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][3] {
+							MaxCard5[2] = playersAllCard[i]
+						}
+						if playersAllCard[i].Suit == k && playersAllCard[i].Rank == suitListMap[k][4] {
+							MaxCard5[3] = playersAllCard[i]
+						}
+					}
+					return Grade, MaxCard5
+				} else { //只是同花
+					Grade = 5
+					j := 0 //maxCard5的下标
+					for i := 0; i < 7; i++ {
+						if playersAllCard[i].Suit == k && j < 5 {
+							MaxCard5[j] = playersAllCard[i]
+							j++
+						}
+					}
+					return Grade, MaxCard5
+				}
+			}
+
+		}
+		if len(tempList) == 5 { //没有同花的可能，只能是顺子
+			Grade = 4
+			j := 0 //maxCard5的下标
+			for i := 0; i < 7; i++ {
+				if tempList[j] == playersAllCard[i].Rank { //长度可能超过5 所以还得加上判断
+					MaxCard5[j] = playersAllCard[i]
+					if j >= 4 {
+						break
+					}
+					j++
+					continue
+				}
+			}
+			return Grade, MaxCard5
+		}
+		if straighACEtoFive { //ace顺子 5432A
+			Grade = 4
+			acesign := false
+			fiveSign := false
+			fourSign := false
+			threeSign := false
+			twoSign := false
+			for i := 0; i < 7; i++ {
+				if playersAllCard[i].Rank == 14 && !acesign {
+					MaxCard5[4] = playersAllCard[i]
+					acesign = true
+					continue
+				}
+				if playersAllCard[i].Rank == 5 && !fiveSign {
+					MaxCard5[0] = playersAllCard[i]
+					fiveSign = true
+					continue
+				}
+				if playersAllCard[i].Rank == 4 && !fourSign {
+					MaxCard5[1] = playersAllCard[i]
+					fourSign = true
+					continue
+				}
+				if playersAllCard[i].Rank == 3 && !threeSign {
+					MaxCard5[2] = playersAllCard[i]
+					threeSign = true
+					continue
+				}
+				if playersAllCard[i].Rank == 2 && !twoSign {
+					MaxCard5[3] = playersAllCard[i]
+					twoSign = true
+					continue
+				}
+			}
+			return Grade, MaxCard5
+		} else { //只能是对子
+			Grade = 2
+			j := 2 //maxCard5的下标
+			for i := 0; i < 7; i++ {
+				if playersAllCard[i].Rank == pairRank1 { //赋值对子
+					MaxCard5[0] = playersAllCard[i]
+					MaxCard5[1] = playersAllCard[i+1]
+					i = i + 1
+					continue
+				} else { //赋值后三位
+					if j < 5 {
+						MaxCard5[j] = playersAllCard[i]
+						j++
+					}
+				}
+			}
+			return Grade, MaxCard5
+		}
+	default: //长度为7
 	}
 
 	return 0, MaxCard5
@@ -743,4 +977,12 @@ func max(a, b int) int {
 		return a
 	}
 	return b
+}
+
+// sortDescending 对切片进行降序排序
+func sortDescending(arr []int) {
+	// 使用 sort.Slice 进行降序排序
+	sort.Slice(arr, func(i, j int) bool {
+		return arr[i] > arr[j] // 比较函数，定义降序排序
+	})
 }

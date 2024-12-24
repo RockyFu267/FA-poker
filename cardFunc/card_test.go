@@ -427,6 +427,55 @@ func Test_Judge5From7(t *testing.T) {
 		// {Rank: 4, Suit: "黑桃"},
 		// {Rank: 3, Suit: "黑桃"},
 		// {Rank: 2, Suit: "黑桃"},
+		// 同花顺 用例1 长度6  A+B+C+D+E+FF
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "红桃"},
+		// {Rank: 12, Suit: "红桃"},
+		// {Rank: 11, Suit: "红桃"},
+		// {Rank: 10, Suit: "红桃"},
+		// {Rank: 9, Suit: "红桃"},
+		// {Rank: 9, Suit: "方片"},
+		// 同花顺 用例2 长度6 A+B+C+DD+E+F
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 11, Suit: "红桃"},
+		// {Rank: 10, Suit: "红桃"},
+		// {Rank: 9, Suit: "黑桃"},
+		// {Rank: 9, Suit: "红桃"},
+		// {Rank: 8, Suit: "红桃"},
+		// {Rank: 7, Suit: "红桃"},
+		//同花顺 用例3 长度6 AA+B+C+D+E+F
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 14, Suit: "红桃"},
+		// {Rank: 13, Suit: "红桃"},
+		// {Rank: 12, Suit: "红桃"},
+		// {Rank: 11, Suit: "红桃"},
+		// {Rank: 10, Suit: "红桃"},
+		// {Rank: 9, Suit: "黑桃"},
+		//----------------------同花顺5432A
+		// 同花顺 用例4 长度6  AA+B+C+D+E+F
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 14, Suit: "红桃"},
+		// {Rank: 8, Suit: "红桃"},
+		// {Rank: 5, Suit: "红桃"},
+		// {Rank: 4, Suit: "红桃"},
+		// {Rank: 3, Suit: "红桃"},
+		// {Rank: 2, Suit: "红桃"},
+		// 同花顺 用例7 长度6 A+B+CC+D+E+F
+		// {Rank: 14, Suit: "红桃"},
+		// {Rank: 8, Suit: "红桃"},
+		// {Rank: 5, Suit: "黑桃"},
+		// {Rank: 5, Suit: "红桃"},
+		// {Rank: 4, Suit: "红桃"},
+		// {Rank: 3, Suit: "红桃"},
+		// {Rank: 2, Suit: "红桃"},
+		//同花顺 用例8 长度6 A+B+CCC+D+E
+		// {Rank: 14, Suit: "红桃"},
+		// {Rank: 8, Suit: "黑桃"},
+		// {Rank: 5, Suit: "红桃"},
+		// {Rank: 4, Suit: "红桃"},
+		// {Rank: 3, Suit: "红桃"},
+		// {Rank: 2, Suit: "黑桃"},
+		// {Rank: 2, Suit: "红桃"},
 		//同花 用例1 长度5 A+B+C+D+EEE
 		// {Rank: 14, Suit: "黑桃"},
 		// {Rank: 13, Suit: "黑桃"},
@@ -467,6 +516,30 @@ func Test_Judge5From7(t *testing.T) {
 		// {Rank: 12, Suit: "黑桃"},
 		// {Rank: 11, Suit: "黑桃"},
 		// {Rank: 9, Suit: "黑桃"},
+		//同花 用例6 长度6 AA+B+C+D+E+F
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 14, Suit: "红桃"},
+		// {Rank: 13, Suit: "红桃"},
+		// {Rank: 12, Suit: "红桃"},
+		// {Rank: 11, Suit: "红桃"},
+		// {Rank: 9, Suit: "红桃"},
+		// {Rank: 8, Suit: "方片"},
+		// 同花 用例7 长度6 A+B+CC+D+E+F
+		// {Rank: 14, Suit: "红桃"},
+		// {Rank: 13, Suit: "红桃"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 12, Suit: "红桃"},
+		// {Rank: 11, Suit: "红桃"},
+		// {Rank: 9, Suit: "红桃"},
+		// {Rank: 8, Suit: "红桃"},
+		//同花 用例7 长度6 A+B+C+D+E+FF
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "红桃"},
+		// {Rank: 12, Suit: "红桃"},
+		// {Rank: 11, Suit: "红桃"},
+		// {Rank: 9, Suit: "红桃"},
+		// {Rank: 8, Suit: "黑桃"},
+		// {Rank: 8, Suit: "红桃"},
 		//顺子 用例1 长度5 A+B+C+D+EEE
 		// {Rank: 14, Suit: "红桃"},
 		// {Rank: 13, Suit: "黑桃"},
@@ -507,8 +580,32 @@ func Test_Judge5From7(t *testing.T) {
 		// {Rank: 12, Suit: "黑桃"},
 		// {Rank: 11, Suit: "黑桃"},
 		// {Rank: 10, Suit: "黑桃"},
+		//顺子 用例6 长度6 AA+B+C+D+E+F
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 14, Suit: "红桃"},
+		// {Rank: 13, Suit: "黑桃"},
+		// {Rank: 12, Suit: "红桃"},
+		// {Rank: 11, Suit: "黑桃"},
+		// {Rank: 10, Suit: "黑桃"},
+		// {Rank: 8, Suit: "红桃"},
+		// 顺子 用例7 长度6 A+B+CC+D+E+F
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "红桃"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 12, Suit: "红桃"},
+		// {Rank: 11, Suit: "黑桃"},
+		// {Rank: 10, Suit: "黑桃"},
+		// {Rank: 9, Suit: "红桃"},
+		//顺子 用例8 长度6 A+B+C+D+E+FF
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 12, Suit: "红桃"},
+		// {Rank: 11, Suit: "黑桃"},
+		// {Rank: 10, Suit: "红桃"},
+		// {Rank: 9, Suit: "黑桃"},
+		// {Rank: 8, Suit: "黑桃"},
+		// {Rank: 8, Suit: "红桃"},
 		//----------------------顺5432A
-		// 顺子 用例6 长度5  A+B+C+D+EEE
+		// A顺子 用例1 长度5  A+B+C+D+EEE
 		// {Rank: 14, Suit: "红桃"},
 		// {Rank: 5, Suit: "黑桃"},
 		// {Rank: 4, Suit: "黑桃"},
@@ -516,7 +613,7 @@ func Test_Judge5From7(t *testing.T) {
 		// {Rank: 2, Suit: "黑桃"},
 		// {Rank: 2, Suit: "红桃"},
 		// {Rank: 2, Suit: "方片"},
-		// 顺子 用例7 长度5 A+B+C+DDD+E
+		// A顺子 用例2 长度5 A+B+C+DDD+E
 		// {Rank: 14, Suit: "红桃"},
 		// {Rank: 5, Suit: "黑桃"},
 		// {Rank: 4, Suit: "黑桃"},
@@ -524,7 +621,7 @@ func Test_Judge5From7(t *testing.T) {
 		// {Rank: 3, Suit: "红桃"},
 		// {Rank: 3, Suit: "方片"},
 		// {Rank: 2, Suit: "黑桃"},
-		//顺子 用例8 长度5 A+B+CCC+D+E
+		//A顺子 用例3 长度5 A+B+CCC+D+E
 		// {Rank: 14, Suit: "红桃"},
 		// {Rank: 5, Suit: "黑桃"},
 		// {Rank: 4, Suit: "黑桃"},
@@ -532,7 +629,7 @@ func Test_Judge5From7(t *testing.T) {
 		// {Rank: 4, Suit: "方片"},
 		// {Rank: 3, Suit: "黑桃"},
 		// {Rank: 2, Suit: "黑桃"},
-		//顺子 用例9 长度5 A+BBB+C+D+E
+		//A顺子 用例4 长度5 A+BBB+C+D+E
 		// {Rank: 14, Suit: "红桃"},
 		// {Rank: 5, Suit: "黑桃"},
 		// {Rank: 5, Suit: "红桃"},
@@ -540,7 +637,7 @@ func Test_Judge5From7(t *testing.T) {
 		// {Rank: 4, Suit: "黑桃"},
 		// {Rank: 3, Suit: "黑桃"},
 		// {Rank: 2, Suit: "黑桃"},
-		//顺子 用例10 长度5 AAA+B+C+D+E
+		//A顺子 用例5 长度5 AAA+B+C+D+E
 		// {Rank: 14, Suit: "黑桃"},
 		// {Rank: 14, Suit: "红桃"},
 		// {Rank: 14, Suit: "方片"},
@@ -548,6 +645,30 @@ func Test_Judge5From7(t *testing.T) {
 		// {Rank: 4, Suit: "黑桃"},
 		// {Rank: 3, Suit: "黑桃"},
 		// {Rank: 2, Suit: "黑桃"},
+		// A顺子 用例6 长度6  AA+B+C+D+E+F
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 14, Suit: "红桃"},
+		// {Rank: 8, Suit: "黑桃"},
+		// {Rank: 5, Suit: "黑桃"},
+		// {Rank: 4, Suit: "红桃"},
+		// {Rank: 3, Suit: "红桃"},
+		// {Rank: 2, Suit: "红桃"},
+		// A顺子 用例7 长度6 A+B+C+DDD+E+F
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 8, Suit: "黑桃"},
+		// {Rank: 5, Suit: "黑桃"},
+		// {Rank: 5, Suit: "红桃"},
+		// {Rank: 4, Suit: "红桃"},
+		// {Rank: 3, Suit: "红桃"},
+		// {Rank: 2, Suit: "红桃"},
+		//A顺子 用例8 长度6 A+B+CCC+D+E
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 8, Suit: "黑桃"},
+		// {Rank: 5, Suit: "红桃"},
+		// {Rank: 4, Suit: "红桃"},
+		// {Rank: 3, Suit: "红桃"},
+		// {Rank: 2, Suit: "黑桃"},
+		// {Rank: 2, Suit: "红桃"},
 		//三条 用例1 长度5 AAA+B+C+D+E
 		// {Rank: 14, Suit: "黑桃"},
 		// {Rank: 14, Suit: "红桃"},
@@ -589,13 +710,37 @@ func Test_Judge5From7(t *testing.T) {
 		// {Rank: 9, Suit: "黑桃"},
 		// {Rank: 9, Suit: "红桃"},
 		//两对 用例3 长度5 A+BB+C+DD+E
-		{Rank: 14, Suit: "黑桃"},
-		{Rank: 13, Suit: "黑桃"},
-		{Rank: 13, Suit: "红桃"},
-		{Rank: 12, Suit: "黑桃"},
-		{Rank: 11, Suit: "黑桃"},
-		{Rank: 11, Suit: "方片"},
-		{Rank: 9, Suit: "红桃"},
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "黑桃"},
+		// {Rank: 13, Suit: "红桃"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 11, Suit: "黑桃"},
+		// {Rank: 11, Suit: "方片"},
+		// {Rank: 9, Suit: "红桃"},
+		//对子 用例1 长度6 AA+B+C+D+E+F
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 14, Suit: "红桃"},
+		// {Rank: 13, Suit: "红桃"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 9, Suit: "黑桃"},
+		// {Rank: 8, Suit: "方片"},
+		// {Rank: 6, Suit: "红桃"},
+		//对子 用例2 长度6 A+B+CC+D+E+F
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "红桃"},
+		// {Rank: 12, Suit: "黑桃"},
+		// {Rank: 12, Suit: "红桃"},
+		// {Rank: 9, Suit: "黑桃"},
+		// {Rank: 8, Suit: "方片"},
+		// {Rank: 6, Suit: "红桃"},
+		//对子 用例3 长度6 A+B+CC+D+E+F
+		// {Rank: 14, Suit: "黑桃"},
+		// {Rank: 13, Suit: "红桃"},
+		// {Rank: 12, Suit: "红桃"},
+		// {Rank: 9, Suit: "黑桃"},
+		// {Rank: 8, Suit: "方片"},
+		// {Rank: 6, Suit: "黑桃"},
+		// {Rank: 6, Suit: "红桃"},
 	}
 
 	grade, card5 := Judge5From7(inputTest)
