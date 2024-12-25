@@ -759,6 +759,7 @@ type testCard struct {
 func Test_Judge5From7Auto(t *testing.T) {
 	var inputTest []testCard
 	inputTest = append(inputTest, testCard{
+		//-----同花顺---------- 567
 		Card7: [7]Card{ //同花顺 长度6 1
 			{Rank: 14, Suit: "红桃"},
 			{Rank: 13, Suit: "红桃"},
@@ -794,13 +795,312 @@ func Test_Judge5From7Auto(t *testing.T) {
 			{Rank: 10, Suit: "红桃"},
 		},
 		grade: 8,
+	}, testCard{
+		Card7: [7]Card{ //同花顺 长度7 1
+			{Rank: 14, Suit: "红桃"},
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 12, Suit: "红桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "红桃"},
+			{Rank: 9, Suit: "黑桃"},
+			{Rank: 8, Suit: "方片"},
+		},
+		Card5: [5]Card{
+			{Rank: 14, Suit: "红桃"},
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 12, Suit: "红桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "红桃"},
+		},
+		grade: 8,
+	}, testCard{
+		Card7: [7]Card{ //同花顺 长度7 2
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 12, Suit: "红桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "红桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "方片"},
+		},
+		Card5: [5]Card{
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 12, Suit: "红桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "红桃"},
+			{Rank: 9, Suit: "红桃"},
+		},
+		grade: 8,
+	}, testCard{
+		Card7: [7]Card{ //同花顺 长度7 3
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 13, Suit: "黑桃"},
+			{Rank: 12, Suit: "红桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "红桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "红桃"},
+		},
+		Card5: [5]Card{
+			{Rank: 12, Suit: "红桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "红桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "红桃"},
+		},
+		grade: 8,
+	}, testCard{
+		Card7: [7]Card{ //同花顺 长度7 4
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 14, Suit: "红桃"},
+			{Rank: 8, Suit: "红桃"},
+			{Rank: 5, Suit: "红桃"},
+			{Rank: 4, Suit: "红桃"},
+			{Rank: 3, Suit: "红桃"},
+			{Rank: 2, Suit: "红桃"},
+		},
+		Card5: [5]Card{
+			{Rank: 5, Suit: "红桃"},
+			{Rank: 4, Suit: "红桃"},
+			{Rank: 3, Suit: "红桃"},
+			{Rank: 2, Suit: "红桃"},
+			{Rank: 14, Suit: "红桃"},
+		},
+		grade: 8,
+	}, testCard{
+		Card7: [7]Card{ //同花顺 长度7 5
+			{Rank: 14, Suit: "红桃"},
+			{Rank: 8, Suit: "红桃"},
+			{Rank: 6, Suit: "红桃"},
+			{Rank: 5, Suit: "红桃"},
+			{Rank: 4, Suit: "红桃"},
+			{Rank: 3, Suit: "红桃"},
+			{Rank: 2, Suit: "红桃"},
+		},
+		Card5: [5]Card{
+			{Rank: 6, Suit: "红桃"},
+			{Rank: 5, Suit: "红桃"},
+			{Rank: 4, Suit: "红桃"},
+			{Rank: 3, Suit: "红桃"},
+			{Rank: 2, Suit: "红桃"},
+		},
+		grade: 8,
+	}, testCard{
+		Card7: [7]Card{ //同花顺 长度7 6
+			{Rank: 14, Suit: "红桃"},
+			{Rank: 8, Suit: "红桃"},
+			{Rank: 5, Suit: "红桃"},
+			{Rank: 4, Suit: "红桃"},
+			{Rank: 3, Suit: "红桃"},
+			{Rank: 2, Suit: "黑桃"},
+			{Rank: 2, Suit: "红桃"},
+		},
+		Card5: [5]Card{
+			{Rank: 5, Suit: "红桃"},
+			{Rank: 4, Suit: "红桃"},
+			{Rank: 3, Suit: "红桃"},
+			{Rank: 2, Suit: "红桃"},
+			{Rank: 14, Suit: "红桃"},
+		},
+		grade: 8,
+		//-----四条----------234
+		//-----葫芦----------34
+		//-----同花----------567
+	}, testCard{
+		Card7: [7]Card{ //同花 长度7 1
+			{Rank: 14, Suit: "红桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "红桃"},
+			{Rank: 6, Suit: "红桃"},
+			{Rank: 4, Suit: "黑桃"},
+			{Rank: 3, Suit: "黑桃"},
+			{Rank: 2, Suit: "红桃"},
+		},
+		Card5: [5]Card{
+			{Rank: 14, Suit: "红桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "红桃"},
+			{Rank: 6, Suit: "红桃"},
+			{Rank: 2, Suit: "红桃"},
+		},
+		grade: 5,
+	}, testCard{
+		Card7: [7]Card{ //同花 长度7 2
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "红桃"},
+			{Rank: 6, Suit: "红桃"},
+			{Rank: 4, Suit: "黑桃"},
+			{Rank: 3, Suit: "红桃"},
+			{Rank: 2, Suit: "红桃"},
+		},
+		Card5: [5]Card{
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "红桃"},
+			{Rank: 6, Suit: "红桃"},
+			{Rank: 3, Suit: "红桃"},
+			{Rank: 2, Suit: "红桃"},
+		},
+		grade: 5,
+		//-----顺子----------567
+	}, testCard{
+		Card7: [7]Card{ //顺子 长度7 1
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 12, Suit: "黑桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "黑桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "黑桃"},
+		},
+		Card5: [5]Card{
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 12, Suit: "黑桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "黑桃"},
+		},
+		grade: 4,
+	}, testCard{
+		Card7: [7]Card{ //顺子 长度7 2
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 12, Suit: "黑桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "黑桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "黑桃"},
+			{Rank: 7, Suit: "红桃"},
+		},
+		Card5: [5]Card{
+			{Rank: 12, Suit: "黑桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "黑桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "黑桃"},
+		},
+		grade: 4,
+	}, testCard{
+		Card7: [7]Card{ //顺子 长度7 3
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 13, Suit: "黑桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "黑桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "黑桃"},
+			{Rank: 7, Suit: "红桃"},
+		},
+		Card5: [5]Card{
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "黑桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "黑桃"},
+			{Rank: 7, Suit: "红桃"},
+		},
+		grade: 4,
+		//-----三条----------5
+		//-----两对---------- 456
+	}, testCard{
+		Card7: [7]Card{ //两对 长度5 1
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 13, Suit: "黑桃"},
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 10, Suit: "黑桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "黑桃"},
+			{Rank: 8, Suit: "红桃"},
+		},
+		Card5: [5]Card{
+			{Rank: 13, Suit: "黑桃"},
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 8, Suit: "黑桃"},
+			{Rank: 8, Suit: "红桃"},
+			{Rank: 14, Suit: "黑桃"},
+		},
+		grade: 2,
+	}, testCard{
+		Card7: [7]Card{ //两对 长度5 2
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 13, Suit: "黑桃"},
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 10, Suit: "黑桃"},
+			{Rank: 9, Suit: "黑桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "红桃"},
+		},
+		Card5: [5]Card{
+			{Rank: 13, Suit: "黑桃"},
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 9, Suit: "黑桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 14, Suit: "黑桃"},
+		},
+		grade: 2,
+		//-----对子----------6
+	}, testCard{
+		Card7: [7]Card{ //对子 长度6 1
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 13, Suit: "黑桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "黑桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "黑桃"},
+			{Rank: 8, Suit: "红桃"},
+		},
+		Card5: [5]Card{
+			{Rank: 8, Suit: "黑桃"},
+			{Rank: 8, Suit: "红桃"},
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 13, Suit: "黑桃"},
+			{Rank: 11, Suit: "红桃"},
+		},
+		grade: 1,
+	}, testCard{
+		Card7: [7]Card{ //对子 长度6 2
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 13, Suit: "黑桃"},
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "黑桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "黑桃"},
+		},
+		Card5: [5]Card{
+			{Rank: 13, Suit: "黑桃"},
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "黑桃"},
+		},
+		grade: 1,
+		//-----高牌----------7
+	}, testCard{
+		Card7: [7]Card{ //高牌 长度7 1
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 13, Suit: "黑桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "黑桃"},
+			{Rank: 9, Suit: "红桃"},
+			{Rank: 8, Suit: "黑桃"},
+			{Rank: 6, Suit: "红桃"},
+		},
+		Card5: [5]Card{
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 13, Suit: "黑桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "黑桃"},
+			{Rank: 9, Suit: "红桃"},
+		},
+		grade: 0,
 	})
 	for k, v := range inputTest {
 		grade, card5 := Judge5From7(v.Card7)
 		if grade != v.grade || !reflect.DeepEqual(card5, v.Card5) {
 			t.Errorf("Test_Judge5From7Auto 第%d个测试用例失败", k)
+			fmt.Println(v.Card7)
 		}
+		fmt.Print(v.Card5[0].CardTranslate(), " ", v.Card5[1].CardTranslate(), " ", v.Card5[2].CardTranslate(), " ", v.Card5[3].CardTranslate(), " ", v.Card5[4].CardTranslate(), "\n")
 	}
+	fmt.Println("Test_Judge5From7Auto 一共通过", len(inputTest), "个测试用例")
 }
 
 func Test_containsStraightKeys(t *testing.T) {

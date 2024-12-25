@@ -734,7 +734,6 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 		}
 		sortDescending(templist)
 		tempList = templist
-		fmt.Println(templist) //debug
 		if templist[0]-templist[4] == 4 {
 			tempList = templist[:5]
 		}
@@ -742,7 +741,6 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 			tempList = templist[1:]
 		}
 
-		fmt.Println(tempList)           //debug
 		for k, v := range suitListMap { //判断是否有同花，可能是同花、同花顺
 			if len(v) == 6 { //有同花
 				if suitListMap[k][0]-suitListMap[k][4] == 4 { //同花顺，但不包括5432A的牌型
@@ -927,7 +925,7 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 			}
 			return Grade, MaxCard5
 		} else { //只能是对子
-			Grade = 2
+			Grade = 1
 			j := 2 //maxCard5的下标
 			for i := 0; i < 7; i++ {
 				if playersAllCard[i].Rank == pairRank1 { //赋值对子
@@ -944,7 +942,104 @@ func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
 			}
 			return Grade, MaxCard5
 		}
-	default: //长度为7
+	case 7: //可能是同花顺、同花、顺子、高牌
+		for k, v := range suitMap { //判断是否是同花顺、顺子
+			if v >= 5 { //至少是同花
+				if playersAllCard[0].Rank-playersAllCard[4].Rank == 4 && playersAllCard[0].Suit == k && playersAllCard[1].Suit == k && playersAllCard[2].Suit == k && playersAllCard[3].Suit == k && playersAllCard[4].Suit == k { //是同花顺 不包含5432A
+					Grade = 8
+					MaxCard5[0] = playersAllCard[0]
+					MaxCard5[1] = playersAllCard[1]
+					MaxCard5[2] = playersAllCard[2]
+					MaxCard5[3] = playersAllCard[3]
+					MaxCard5[4] = playersAllCard[4]
+					return Grade, MaxCard5
+				}
+				if playersAllCard[1].Rank-playersAllCard[5].Rank == 4 && playersAllCard[1].Suit == k && playersAllCard[2].Suit == k && playersAllCard[3].Suit == k && playersAllCard[4].Suit == k && playersAllCard[5].Suit == k { //是同花顺 不包含5432A
+					Grade = 8
+					MaxCard5[0] = playersAllCard[1]
+					MaxCard5[1] = playersAllCard[2]
+					MaxCard5[2] = playersAllCard[3]
+					MaxCard5[3] = playersAllCard[4]
+					MaxCard5[4] = playersAllCard[5]
+					return Grade, MaxCard5
+				}
+				if playersAllCard[2].Rank-playersAllCard[6].Rank == 4 && playersAllCard[2].Suit == k && playersAllCard[3].Suit == k && playersAllCard[4].Suit == k && playersAllCard[5].Suit == k && playersAllCard[6].Suit == k { //是同花顺 不包含5432A
+					Grade = 8
+					MaxCard5[0] = playersAllCard[2]
+					MaxCard5[1] = playersAllCard[3]
+					MaxCard5[2] = playersAllCard[4]
+					MaxCard5[3] = playersAllCard[5]
+					MaxCard5[4] = playersAllCard[6]
+					return Grade, MaxCard5
+				}
+				if playersAllCard[0].Rank == 14 && playersAllCard[3].Rank == 5 && playersAllCard[4].Rank == 4 && playersAllCard[5].Rank == 3 && playersAllCard[6].Rank == 2 && playersAllCard[0].Suit == k && playersAllCard[3].Suit == k && playersAllCard[4].Suit == k && playersAllCard[5].Suit == k && playersAllCard[6].Suit == k { //同花顺 5432A
+					Grade = 8
+					MaxCard5[4] = playersAllCard[0]
+					MaxCard5[0] = playersAllCard[3]
+					MaxCard5[1] = playersAllCard[4]
+					MaxCard5[2] = playersAllCard[5]
+					MaxCard5[3] = playersAllCard[6]
+					return Grade, MaxCard5
+				} else { // 只能是同花
+					Grade = 5
+					j := 0 //maxCard5的下标
+					for i := 0; i < 7; i++ {
+						if playersAllCard[i].Suit == k && j < 5 {
+							MaxCard5[j] = playersAllCard[i]
+							j++
+						}
+					}
+					return Grade, MaxCard5
+				}
+			}
+		}
+		if playersAllCard[0].Rank-playersAllCard[4].Rank == 4 { //顺子 不包含5432A
+			Grade = 4
+			MaxCard5[0] = playersAllCard[0]
+			MaxCard5[1] = playersAllCard[1]
+			MaxCard5[2] = playersAllCard[2]
+			MaxCard5[3] = playersAllCard[3]
+			MaxCard5[4] = playersAllCard[4]
+			return Grade, MaxCard5
+		}
+		if playersAllCard[1].Rank-playersAllCard[5].Rank == 4 { //顺子 不包含5432A
+			Grade = 4
+			MaxCard5[0] = playersAllCard[1]
+			MaxCard5[1] = playersAllCard[2]
+			MaxCard5[2] = playersAllCard[3]
+			MaxCard5[3] = playersAllCard[4]
+			MaxCard5[4] = playersAllCard[5]
+			return Grade, MaxCard5
+		}
+		if playersAllCard[2].Rank-playersAllCard[6].Rank == 4 { //顺子 不包含5432A
+			Grade = 4
+			MaxCard5[0] = playersAllCard[2]
+			MaxCard5[1] = playersAllCard[3]
+			MaxCard5[2] = playersAllCard[4]
+			MaxCard5[3] = playersAllCard[5]
+			MaxCard5[4] = playersAllCard[6]
+			return Grade, MaxCard5
+		}
+		if playersAllCard[0].Rank == 14 && playersAllCard[3].Rank == 5 && playersAllCard[4].Rank == 4 && playersAllCard[5].Rank == 3 && playersAllCard[6].Rank == 2 { //顺子 5432A
+			Grade = 4
+			MaxCard5[4] = playersAllCard[0]
+			MaxCard5[0] = playersAllCard[3]
+			MaxCard5[1] = playersAllCard[4]
+			MaxCard5[2] = playersAllCard[5]
+			MaxCard5[3] = playersAllCard[6]
+			return Grade, MaxCard5
+		} else { //只能是高牌
+			Grade = 0
+			MaxCard5[0] = playersAllCard[0]
+			MaxCard5[1] = playersAllCard[1]
+			MaxCard5[2] = playersAllCard[2]
+			MaxCard5[3] = playersAllCard[3]
+			MaxCard5[4] = playersAllCard[4]
+			return Grade, MaxCard5
+		}
+	default:
+		Grade = 0
+		return Grade, MaxCard5
 	}
 
 	return 0, MaxCard5
