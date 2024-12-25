@@ -2,6 +2,7 @@ package cardFunc
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 )
 
@@ -746,6 +747,60 @@ func Test_Judge5From7(t *testing.T) {
 	grade, card5 := Judge5From7(inputTest)
 	fmt.Println(grade)
 	fmt.Println(card5)
+}
+
+// 牌型的测试用例
+type testCard struct {
+	Card7 [7]Card
+	Card5 [5]Card
+	grade int
+}
+
+func Test_Judge5From7Auto(t *testing.T) {
+	var inputTest []testCard
+	inputTest = append(inputTest, testCard{
+		Card7: [7]Card{ //同花顺 长度6 1
+			{Rank: 14, Suit: "红桃"},
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 12, Suit: "红桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "红桃"},
+			{Rank: 8, Suit: "黑桃"},
+			{Rank: 8, Suit: "红桃"},
+		},
+		Card5: [5]Card{
+			{Rank: 14, Suit: "红桃"},
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 12, Suit: "红桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "红桃"},
+		},
+		grade: 8,
+	}, testCard{
+		Card7: [7]Card{ //同花顺 长度6 2
+			{Rank: 14, Suit: "红桃"},
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 12, Suit: "红桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "红桃"},
+			{Rank: 8, Suit: "黑桃"},
+			{Rank: 8, Suit: "方片"},
+		},
+		Card5: [5]Card{
+			{Rank: 14, Suit: "红桃"},
+			{Rank: 13, Suit: "红桃"},
+			{Rank: 12, Suit: "红桃"},
+			{Rank: 11, Suit: "红桃"},
+			{Rank: 10, Suit: "红桃"},
+		},
+		grade: 8,
+	})
+	for k, v := range inputTest {
+		grade, card5 := Judge5From7(v.Card7)
+		if grade != v.grade || !reflect.DeepEqual(card5, v.Card5) {
+			t.Errorf("Test_Judge5From7Auto 第%d个测试用例失败", k)
+		}
+	}
 }
 
 func Test_containsStraightKeys(t *testing.T) {
