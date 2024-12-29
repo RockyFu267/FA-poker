@@ -9,6 +9,56 @@ import (
 	"time"
 )
 
+// 指定人数 洗牌，发牌，并比较谁的牌最大,并且可以选择指定手牌
+func shuffleJudgeDemo(playlist []Players, appointHandCardList []HandCard) (winner []Players) {
+	playerNum := len(playlist)
+	var Card52 [52]Card
+	var resHandList []HandCard
+	var pubHandList []Card
+
+	if appointHandCardList != nil { //填写指定发牌的逻辑
+	} else {
+		Card52 = ShuffleCard() //洗牌
+		resHandList, pubHandList = DealCards(Card52, playerNum)
+	}
+	fmt.Println(pubHandList) //debug
+	maxGrade := 0
+	maxCard5 := [5]int{0, 0, 0, 0, 0}
+	// 假装这里已经处理了座次
+	for i := 0; i < len(resHandList); i++ {
+		playlist[i].Hand = resHandList[i]
+		playlist[i].Card7[0] = playlist[i].Hand.HandCard[0]
+		playlist[i].Card7[1] = playlist[i].Hand.HandCard[1]
+		playlist[i].Card7[2] = pubHandList[0]
+		playlist[i].Card7[3] = pubHandList[1]
+		playlist[i].Card7[4] = pubHandList[2]
+		playlist[i].Card7[5] = pubHandList[3]
+		playlist[i].Card7[6] = pubHandList[4]
+		playlist[i].Grade, playlist[i].Card5 = Judge5From7(playlist[i].Card7)
+		fmt.Println(playlist[i].ID, playlist[i].Hand)              //debug
+		fmt.Println(playlist[i].Grade, "-max-", playlist[i].Card5) //debug
+		if maxGrade <= playlist[i].Grade {
+			maxGrade = playlist[i].Grade
+			for i := 0; i < 5; i++ {
+				if playlist[i].Card5[i].Rank > maxCard5[i] {
+					maxCard5[i] = playlist[i].Card5[i].Rank
+				}
+			}
+		}
+	}
+	for i := 0; i < len(playlist); i++ {
+		if playlist[i].Grade == maxGrade {
+			for j := 0; j < 5; j++ {
+				if playlist[i].Card5[j].Rank == maxCard5[j] {
+					winner = append(winner, playlist[i])
+				}
+			}
+		}
+	}
+
+	return winner
+}
+
 // CardTranslate 转换卡牌显示值
 func (p Card) CardTranslate() string {
 	suits := map[string]string{
@@ -343,8 +393,7 @@ func CombineCardsDemo(playersHandCard []HandCard, publicCard []Card) (resHandCar
 	return resHandCard
 }
 
-// Judge5From7 7选五的21种牌型的牌力，高牌的牌力为0，对子的牌力为1，两对的牌力为2，三条的牌力为3，顺子的牌力为4，同花的牌力为5，葫芦的牌力为6，四条的牌力为7，同花顺的牌力为8
-func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) {
+func Judge5From7(playersAllCard [7]Card) (Grade int, MaxCard5 [5]Card) { // Judge5From7 7选五的21种牌型的牌力，高牌的牌力为0，对子的牌力为1，两对的牌力为2，三条的牌力为3，顺子的牌力为4，同花的牌力为5，葫芦的牌力为6，四条的牌力为7，同花顺的牌力为8
 	//输入的7张牌，大小已经是按从大到小排列
 	suitMap := make(map[string]int)       //定义四个花色的map，用来统计花色出现的次数
 	suitListMap := make(map[string][]int) //定义四个花色的map，用来统计相同花色的rank
@@ -1080,4 +1129,18 @@ func sortDescending(arr []int) {
 	sort.Slice(arr, func(i, j int) bool {
 		return arr[i] > arr[j] // 比较函数，定义降序排序
 	})
+}
+
+func handSorting(resHand []Card) []Card {
+	n := len(resHand)
+	for j := 0; j < n; j++ {
+		for k := j + 1; k < n; k++ {
+			if resHand[j].Rank < resHand[k].Rank {
+				temp := resHand[j]
+				resHand[j] = resHand[k]
+				resHand[k] = temp
+			}
+		}
+	}
+	return resHand
 }

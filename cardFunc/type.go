@@ -44,6 +44,7 @@ type Players struct {
 	BankRollSum  int64    `json:"bankrollsum"`
 	Card7        [7]Card  `json:"card7"`
 	Card5        [5]Card  `json:"card5"`
+	CardAll      []Card   `json:"cardAll"` //目前默认长度是7
 	Grade        int      `json:"grade"`
 	TableNum     int      `json:"tablenum"`
 	Sitnum       int      `json:"sitnum"`
