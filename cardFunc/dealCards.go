@@ -1,17 +1,12 @@
 package cardFunc
 
-func DealCards(New52CardList [52]Card, playersNumber int) (resHandCard []HandCard, resPublicCard []HandCard) {
-	// 初始化玩家手牌
-	resHandCard = make([]HandCard, playersNumber)
+// // RangeCalculation 概率计算 输入一个整数，默认转化为百分比，返回对应的两张牌型的组合范围分布情况
+// func RangeCalculation(n int) string {
 
-	// 每个玩家分两张牌
-	for i := 0; i < playersNumber; i++ {
-		resHandCard[i] = HandCard{
-			HandCard: [2]Card{
-				New52CardList[i*2],
-				New52CardList[i*2+1],
-			},
-		}
-	}
-	return resHandCard, resHandCard
-}
+// 	return "shit"
+// }
+
+// // WinningRateStatistics 模拟发牌，并默认所有玩家都allin，比对玩家牌力，记录最大牌型的玩家以及最大牌型的牌型，并记录手牌组合赢的游戏的次数
+// func WinningRateStatistics() {
+
+// }
