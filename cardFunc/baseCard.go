@@ -21,19 +21,24 @@ func shuffleJudgeDemo(playlist []Players, appointHandCardList []HandCard) (winne
 		Card52 = ShuffleCard() //洗牌
 		resHandList, pubHandList = DealCards(Card52, playerNum)
 	}
+	fmt.Println(resHandList) //debug
 	fmt.Println(pubHandList) //debug
+
 	maxGrade := 0
 	maxCard5 := [5]int{0, 0, 0, 0, 0}
 	// 假装这里已经处理了座次
 	for i := 0; i < len(resHandList); i++ {
+		var tempCard7 [7]Card
 		playlist[i].Hand = resHandList[i]
-		playlist[i].Card7[0] = playlist[i].Hand.HandCard[0]
-		playlist[i].Card7[1] = playlist[i].Hand.HandCard[1]
-		playlist[i].Card7[2] = pubHandList[0]
-		playlist[i].Card7[3] = pubHandList[1]
-		playlist[i].Card7[4] = pubHandList[2]
-		playlist[i].Card7[5] = pubHandList[3]
-		playlist[i].Card7[6] = pubHandList[4]
+		tempCard7[0] = playlist[i].Hand.HandCard[0]
+		tempCard7[1] = playlist[i].Hand.HandCard[1]
+		tempCard7[2] = pubHandList[0]
+		tempCard7[3] = pubHandList[1]
+		tempCard7[4] = pubHandList[2]
+		tempCard7[5] = pubHandList[3]
+		tempCard7[6] = pubHandList[4]
+		tempCard7 = sortCards(tempCard7)
+		playlist[i].Card7 = tempCard7
 		playlist[i].Grade, playlist[i].Card5 = Judge5From7(playlist[i].Card7)
 		fmt.Println(playlist[i].ID, playlist[i].Hand)              //debug
 		fmt.Println(playlist[i].Grade, "-max-", playlist[i].Card5) //debug
@@ -1131,7 +1136,8 @@ func sortDescending(arr []int) {
 	})
 }
 
-func handSorting(resHand []Card) []Card {
+// handSorting 手牌排序
+func handSorting(resHand []Card) []Card { //手牌排序
 	n := len(resHand)
 	for j := 0; j < n; j++ {
 		for k := j + 1; k < n; k++ {
@@ -1143,4 +1149,50 @@ func handSorting(resHand []Card) []Card {
 		}
 	}
 	return resHand
+}
+
+// 排序手牌
+// ByRankAndSuitForArray定义针对[7]Card类型的排序结构体，实现sort.Interface接口
+type ByRankAndSuitForArray [7]Card
+
+func (c ByRankAndSuitForArray) Len() int {
+	return len(c)
+}
+
+func (c ByRankAndSuitForArray) Less(i, j int) bool {
+	if c[i].Rank == c[j].Rank {
+		suitPriority := map[string]int{"黑桃": 4, "红桃": 3, "方片": 2, "梅花": 1}
+		return suitPriority[c[i].Suit] > suitPriority[c[j].Suit]
+	}
+	return c[i].Rank > c[j].Rank
+}
+
+func (c ByRankAndSuitForArray) Swap(i, j int) {
+	c[i], c[j] = c[j], c[i]
+}
+
+// sortCards对[7]Card数组进行排序
+func sortCards(cards [7]Card) [7]Card {
+	for i := 0; i < len(cards)-1; i++ {
+		for j := 0; j < len(cards)-i-1; j++ {
+			// 先比较牌面数字大小
+			if cards[j].Rank < cards[j+1].Rank {
+				cards[j], cards[j+1] = cards[j+1], cards[j]
+			} else if cards[j].Rank == cards[j+1].Rank {
+				// 牌面数字相同，比较花色权重
+				if suitWeight[cards[j].Suit] < suitWeight[cards[j+1].Suit] {
+					cards[j], cards[j+1] = cards[j+1], cards[j]
+				}
+			}
+		}
+	}
+	return cards
+}
+
+// 定义花色对应的权重，用于比较相同牌面数字时的大小关系
+var suitWeight = map[string]int{
+	"黑桃": 4,
+	"红桃": 3,
+	"方片": 2,
+	"梅花": 1,
 }

@@ -1134,5 +1134,35 @@ func Test_containsStraightKeys(t *testing.T) {
 	fmt.Println(res01)
 	fmt.Println(res02)
 	fmt.Println(res03)
+}
 
+func Test_shuffleJudgeDemo(t *testing.T) {
+	var p1, p2, p3, p4, p5, p6 Players
+	p1.ID = "1"
+	p2.ID = "2"
+	p3.ID = "3"
+	p4.ID = "4"
+	p5.ID = "5"
+	p6.ID = "6"
+	var players = []Players{p1, p2, p3, p4, p5, p6}
+	var appointHandCardList []HandCard
+	winners := shuffleJudgeDemo(players, appointHandCardList)
+	for k, v := range winners {
+		fmt.Println("--AAA---")
+		fmt.Println(k, v)
+	}
+}
+
+func Test_sortCards(t *testing.T) {
+	inputTest := [7]Card{
+		{Rank: 11, Suit: "方片"},
+		{Rank: 10, Suit: "方片"},
+		{Rank: 12, Suit: "黑桃"},
+		{Rank: 11, Suit: "红桃"},
+		{Rank: 6, Suit: "黑桃"},
+		{Rank: 14, Suit: "黑桃"},
+		{Rank: 13, Suit: "梅花"},
+	}
+	res := sortCards(inputTest)
+	fmt.Println(res)
 }
