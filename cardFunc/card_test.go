@@ -1155,13 +1155,13 @@ func Test_shuffleJudgeDemo(t *testing.T) {
 
 func Test_sortCards(t *testing.T) {
 	inputTest := [7]Card{
-		{Rank: 11, Suit: "方片"},
-		{Rank: 10, Suit: "方片"},
-		{Rank: 12, Suit: "黑桃"},
-		{Rank: 11, Suit: "红桃"},
-		{Rank: 6, Suit: "黑桃"},
-		{Rank: 14, Suit: "黑桃"},
-		{Rank: 13, Suit: "梅花"},
+		{Rank: 4, Suit: "方片"},
+		{Rank: 4, Suit: "梅花"},
+		{Rank: 4, Suit: "黑桃"},
+		{Rank: 8, Suit: "方片"},
+		{Rank: 7, Suit: "梅花"},
+		{Rank: 4, Suit: "红桃"},
+		{Rank: 9, Suit: "方片"},
 	}
 	res := sortCards(inputTest)
 	fmt.Println(res)
