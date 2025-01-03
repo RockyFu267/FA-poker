@@ -45,7 +45,18 @@ func shuffleJudgeDemo(playlist []Players, appointHandCardList []HandCard) (winne
 		if maxGrade == playlist[i].Grade {
 			for j := 0; j < 5; j++ {
 				if playlist[i].Card5[j].Rank > maxCard5[j] {
-					maxCard5[j] = playlist[i].Card5[j].Rank
+					maxCard5[0] = playlist[i].Card5[0].Rank
+					maxCard5[1] = playlist[i].Card5[1].Rank
+					maxCard5[2] = playlist[i].Card5[2].Rank
+					maxCard5[3] = playlist[i].Card5[3].Rank
+					maxCard5[4] = playlist[i].Card5[4].Rank
+					break
+				}
+				if playlist[i].Card5[j].Rank == maxCard5[j] {
+					continue
+				}
+				if playlist[i].Card5[j].Rank < maxCard5[j] {
+					break
 				}
 			}
 			continue
@@ -61,14 +72,20 @@ func shuffleJudgeDemo(playlist []Players, appointHandCardList []HandCard) (winne
 	fmt.Println("len ", len(winner))   //debug
 	fmt.Println("maxGrade ", maxGrade) //debug
 	fmt.Println("maxCard5 ", maxCard5) //debug
+
 	for i := 0; i < len(playlist); i++ {
 		if playlist[i].Grade == maxGrade {
 			fmt.Println("最大的ID ", playlist[i].ID) //debug
+			sign := true
 			for j := 0; j < 5; j++ {
 				if playlist[i].Card5[j].Rank == maxCard5[j] {
-					winner = append(winner, playlist[i])
-					fmt.Println("触发J的值 ", j) //debug
+					continue
+				} else {
+					sign = false
 				}
+			}
+			if sign {
+				winner = append(winner, playlist[i])
 			}
 		}
 	}
