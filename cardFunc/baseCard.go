@@ -12,7 +12,7 @@ import (
 // 指定人数 洗牌，发牌，并比较谁的牌最大,并且可以选择指定手牌
 func shuffleJudgeDemo(playlist []Players, appointHandCardList []HandCard) (winner []Players) {
 	playerNum := len(playlist)
-	var Card52 [52]Card
+	var Card52 []Card
 	var resHandList []HandCard
 	var pubHandList []Card
 
@@ -136,10 +136,10 @@ func (p Card) CardRankTranslate() string {
 }
 
 // ShuffleCard 洗牌
-func ShuffleCard() (New52CardList [52]Card) {
+func ShuffleCard() (New52CardList []Card) {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	//初始化52张牌
-	var Card52 = [52]Card{
+	var Card52 = []Card{
 		{Suit: "黑桃", Rank: 14},
 		{Suit: "黑桃", Rank: 2},
 		{Suit: "黑桃", Rank: 3},
@@ -304,7 +304,7 @@ func shortOfShuffleCard(input []Card) (New52CardList []Card) {
 }
 
 // GetTopTwoCards 从洗好的牌中取前两张牌，并按指定规则排序后赋值给 HandCard 类型的变量
-func GetTopTwoCards(deck [52]Card) HandCard {
+func GetTopTwoCards(deck []Card) HandCard {
 	// 取前两张牌
 	topTwoCards := [2]Card{deck[0], deck[1]}
 
@@ -466,10 +466,10 @@ func ShuffleAndRecord(iterations int, filename string) {
 }
 
 // DealCards 发牌，返回玩家手牌和公共牌
-func DealCards(New52CardList [52]Card, playersNumber int) (resHandCard []HandCard, resPublicCard []Card) {
+func DealCards(New52CardList []Card, playersNumber int) (resHandCard []HandCard, resPublicCard []Card) {
 	// 初始化玩家手牌
 	resHandCard = make([]HandCard, playersNumber)
-	resPublicCard = make([]Card, 52-(playersNumber*2))
+	resPublicCard = make([]Card, len(New52CardList)-(playersNumber*2))
 
 	// 每个玩家分两张牌
 	for j := 1; j <= playersNumber; j++ {
