@@ -212,6 +212,97 @@ func ShuffleCard() (New52CardList [52]Card) {
 	return Card52
 }
 
+// ShuffleCard 少牌洗牌
+func shortOfShuffleCard(input []Card) (New52CardList []Card) {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	//初始化52张牌
+	var Card52 = []Card{
+		{Suit: "黑桃", Rank: 14},
+		{Suit: "黑桃", Rank: 2},
+		{Suit: "黑桃", Rank: 3},
+		{Suit: "黑桃", Rank: 4},
+		{Suit: "黑桃", Rank: 5},
+		{Suit: "黑桃", Rank: 6},
+		{Suit: "黑桃", Rank: 7},
+		{Suit: "黑桃", Rank: 8},
+		{Suit: "黑桃", Rank: 9},
+		{Suit: "黑桃", Rank: 10},
+		{Suit: "黑桃", Rank: 11},
+		{Suit: "黑桃", Rank: 12},
+		{Suit: "黑桃", Rank: 13},
+		{Suit: "红桃", Rank: 14},
+		{Suit: "红桃", Rank: 2},
+		{Suit: "红桃", Rank: 3},
+		{Suit: "红桃", Rank: 4},
+		{Suit: "红桃", Rank: 5},
+		{Suit: "红桃", Rank: 6},
+		{Suit: "红桃", Rank: 7},
+		{Suit: "红桃", Rank: 8},
+		{Suit: "红桃", Rank: 9},
+		{Suit: "红桃", Rank: 10},
+		{Suit: "红桃", Rank: 11},
+		{Suit: "红桃", Rank: 12},
+		{Suit: "红桃", Rank: 13},
+		{Suit: "梅花", Rank: 14},
+		{Suit: "梅花", Rank: 2},
+		{Suit: "梅花", Rank: 3},
+		{Suit: "梅花", Rank: 4},
+		{Suit: "梅花", Rank: 5},
+		{Suit: "梅花", Rank: 6},
+		{Suit: "梅花", Rank: 7},
+		{Suit: "梅花", Rank: 8},
+		{Suit: "梅花", Rank: 9},
+		{Suit: "梅花", Rank: 10},
+		{Suit: "梅花", Rank: 11},
+		{Suit: "梅花", Rank: 12},
+		{Suit: "梅花", Rank: 13},
+		{Suit: "方片", Rank: 14},
+		{Suit: "方片", Rank: 2},
+		{Suit: "方片", Rank: 3},
+		{Suit: "方片", Rank: 4},
+		{Suit: "方片", Rank: 5},
+		{Suit: "方片", Rank: 6},
+		{Suit: "方片", Rank: 7},
+		{Suit: "方片", Rank: 8},
+		{Suit: "方片", Rank: 9},
+		{Suit: "方片", Rank: 10},
+		{Suit: "方片", Rank: 11},
+		{Suit: "方片", Rank: 12},
+		{Suit: "方片", Rank: 13},
+	}
+	var result []Card
+	existMap := make(map[Card]bool)
+	for _, v := range input {
+		key := v
+		existMap[key] = true
+	}
+	for _, v := range Card52 {
+		key := v
+		if !existMap[key] {
+			result = append(result, v)
+		}
+	}
+	Card52 = result
+
+	// //洗牌
+	// var new52 [52]Card
+	// 洗牌
+	r.Shuffle(len(Card52), func(i, j int) {
+		Card52[i], Card52[j] = Card52[j], Card52[i]
+	})
+	// b := 0
+	// r := rand.New(rand.NewSource(time.Now().Unix()))
+	// for _, i := range r.Perm(len(Card52)) {
+	// 	val := Card52[i]
+	// 	// fmt.Println(val)
+	// 	// fmt.Println(i)
+	// 	new52[b] = val
+	// 	b = b + 1
+	// }
+	//fmt.Println(new52)
+	return Card52
+}
+
 // GetTopTwoCards 从洗好的牌中取前两张牌，并按指定规则排序后赋值给 HandCard 类型的变量
 func GetTopTwoCards(deck [52]Card) HandCard {
 	// 取前两张牌

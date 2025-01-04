@@ -33,6 +33,24 @@ func Test_ShuffleCard(t *testing.T) {
 	}
 }
 
+func Test_shortOfShuffleCard(t *testing.T) {
+	inputTest := []Card{
+		{Rank: 4, Suit: "方片"},
+		{Rank: 4, Suit: "梅花"},
+		{Rank: 4, Suit: "黑桃"},
+		{Rank: 8, Suit: "方片"},
+		{Rank: 7, Suit: "梅花"},
+		{Rank: 4, Suit: "红桃"},
+		{Rank: 9, Suit: "方片"},
+	}
+	res := shortOfShuffleCard(inputTest)
+	fmt.Println(res)
+	for _, i := range res {
+		cardView := i.CardTranslate()
+		fmt.Println(cardView)
+	}
+}
+
 func Test_compareSuits(t *testing.T) {
 	a := "黑桃"
 	b := "红桃"
