@@ -91,6 +91,34 @@ func Test_DealCards(t *testing.T) {
 	for _, v := range res02 {
 		fmt.Print(v.CardTranslate(), " ")
 	}
+
+	fmt.Println("xxxxxxxxxxxxxxxxxxx")
+
+	inputTest := []Card{
+		{Rank: 4, Suit: "方片"},
+		{Rank: 4, Suit: "梅花"},
+		{Rank: 4, Suit: "黑桃"},
+		{Rank: 8, Suit: "方片"},
+		{Rank: 7, Suit: "梅花"},
+		{Rank: 4, Suit: "红桃"},
+		{Rank: 9, Suit: "方片"},
+	}
+	resA := shortOfShuffleCard(inputTest)
+	for _, i := range resA {
+		cardView := i.CardTranslate()
+		fmt.Print(cardView, " ")
+	}
+
+	resA01, resA02 := DealCards(resA, 5)
+	fmt.Println(len(resA01))
+	for k, v := range resA01 {
+		fmt.Println(k, v.HandCard[0].CardTranslate(), v.HandCard[1].CardTranslate())
+	}
+	fmt.Println(len(resA), len(resA01), len(resA02))
+	fmt.Println("xxxxxxxxxxxxxxxxxxx")
+	for _, v := range resA02 {
+		fmt.Print(v.CardTranslate(), " ")
+	}
 }
 
 func Test_CombineCardsDemo(t *testing.T) {

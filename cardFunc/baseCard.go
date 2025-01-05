@@ -479,7 +479,7 @@ func DealCards(New52CardList []Card, playersNumber int) (resHandCard []HandCard,
 		resHandCard[j-1].HandCard[1] = New52CardList[playersNumber-1+j]
 	}
 	j := 0
-	for i := 1; i <= 52-(playersNumber*2); i++ {
+	for i := 1; i <= len(New52CardList)-(playersNumber*2); i++ {
 		resPublicCard[j] = New52CardList[2*playersNumber-1+i]
 		j++
 	}
