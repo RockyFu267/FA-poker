@@ -1192,6 +1192,12 @@ func Test_shuffleJudgeDemo(t *testing.T) {
 	p6.ID = "6"
 	var players = []Players{p1, p2, p3, p4, p5, p6}
 	var appointHandCardList []HandCard
+	appointHandCardList = append(appointHandCardList, HandCard{
+		HandCard: [2]Card{
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 14, Suit: "红桃"},
+		},
+	})
 	winners := shuffleJudgeDemo(players, appointHandCardList)
 	for k, v := range winners {
 		fmt.Println("--AAA---")

@@ -17,6 +17,22 @@ func shuffleJudgeDemo(playlist []Players, appointHandCardList []HandCard) (winne
 	var pubHandList []Card
 
 	if appointHandCardList != nil { //填写指定发牌的逻辑
+		var tempAppointHand []Card
+		var handTempList []HandCard
+		var handTemp HandCard
+		for i := 0; i < len(appointHandCardList); i++ {
+			tempAppointHand = append(tempAppointHand, appointHandCardList[i].HandCard[0])
+			tempAppointHand = append(tempAppointHand, appointHandCardList[i].HandCard[1])
+			handTemp = HandCard{
+				HandCard: [2]Card{tempAppointHand[0], tempAppointHand[1]},
+			}
+			handTempList = append(handTempList, handTemp)
+		}
+		fmt.Println("指定牌的长度: ", len(tempAppointHand)) //debug
+		Card52 := shortOfShuffleCard(tempAppointHand)
+		resHandListTemp, pubHandListTemp := DealCards(Card52, playerNum-len(handTempList))
+		resHandList = append(handTempList, resHandListTemp...)
+		pubHandList = pubHandListTemp
 	} else {
 		Card52 = ShuffleCard() //洗牌
 		resHandList, pubHandList = DealCards(Card52, playerNum)
