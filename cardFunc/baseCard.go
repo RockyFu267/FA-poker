@@ -24,7 +24,7 @@ func shuffleJudgeDemo(playlist []Players, appointHandCardList []HandCard) (winne
 			tempAppointHand = append(tempAppointHand, appointHandCardList[i].HandCard[0])
 			tempAppointHand = append(tempAppointHand, appointHandCardList[i].HandCard[1])
 			handTemp = HandCard{
-				HandCard: [2]Card{tempAppointHand[0], tempAppointHand[1]},
+				HandCard: [2]Card{appointHandCardList[i].HandCard[0], appointHandCardList[i].HandCard[1]},
 			}
 			handTempList = append(handTempList, handTemp)
 		}
