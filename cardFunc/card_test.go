@@ -1197,36 +1197,44 @@ func Test_shuffleJudgeDemo(t *testing.T) {
 			{Rank: 14, Suit: "黑桃"},
 			{Rank: 14, Suit: "红桃"},
 		},
-	}, HandCard{
-		HandCard: [2]Card{
-			{Rank: 13, Suit: "黑桃"},
-			{Rank: 13, Suit: "红桃"},
-		},
-	}, HandCard{
-		HandCard: [2]Card{
-			{Rank: 12, Suit: "黑桃"},
-			{Rank: 12, Suit: "红桃"},
-		},
-	}, HandCard{
-		HandCard: [2]Card{
-			{Rank: 11, Suit: "黑桃"},
-			{Rank: 11, Suit: "红桃"},
-		},
-	}, HandCard{
-		HandCard: [2]Card{
-			{Rank: 10, Suit: "黑桃"},
-			{Rank: 10, Suit: "红桃"},
-		},
-	}, HandCard{
-		HandCard: [2]Card{
-			{Rank: 9, Suit: "黑桃"},
-			{Rank: 9, Suit: "红桃"},
-		},
 	})
-	winners := shuffleJudgeDemo(players, appointHandCardList)
-	for k, v := range winners {
-		fmt.Println("--AAA---")
-		fmt.Println(k, v)
+	// appointHandCardList = append(appointHandCardList, HandCard{
+	// 	HandCard: [2]Card{
+	// 		{Rank: 14, Suit: "黑桃"},
+	// 		{Rank: 14, Suit: "红桃"},
+	// 	},
+	// }, HandCard{
+	// 	HandCard: [2]Card{
+	// 		{Rank: 13, Suit: "黑桃"},
+	// 		{Rank: 13, Suit: "红桃"},
+	// 	},
+	// }, HandCard{
+	// 	HandCard: [2]Card{
+	// 		{Rank: 12, Suit: "黑桃"},
+	// 		{Rank: 12, Suit: "红桃"},
+	// 	},
+	// }, HandCard{
+	// 	HandCard: [2]Card{
+	// 		{Rank: 11, Suit: "黑桃"},
+	// 		{Rank: 11, Suit: "红桃"},
+	// 	},
+	// }, HandCard{
+	// 	HandCard: [2]Card{
+	// 		{Rank: 10, Suit: "黑桃"},
+	// 		{Rank: 10, Suit: "红桃"},
+	// 	},
+	// }, HandCard{
+	// 	HandCard: [2]Card{
+	// 		{Rank: 9, Suit: "黑桃"},
+	// 		{Rank: 9, Suit: "红桃"},
+	// 	},
+	// })
+	for i := 0; i < 10000; i++ {
+		winners := shuffleJudgeDemo(players, appointHandCardList)
+		for k, v := range winners {
+			fmt.Println("--AAA---")
+			fmt.Println(k, v)
+		}
 	}
 }
 
