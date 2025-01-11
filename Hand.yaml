@@ -1,15 +1,15 @@
 #指定玩家数量
 player: 9
 #指定玩家手牌
-handcardlist: 
+handcard: 
   - handcard: 
     - suit: "方片"
-      rank: "A"
+      rank: 14
     - suit: "方片"
-      rank: "K"
-  - Handcard: 
+      rank: 13
+  - handcard: 
     - suit: "方片"
-      rank: "Q"
+      rank: 12
     - suit: "方片"
-      rank: "J"
+      rank: 11
 
