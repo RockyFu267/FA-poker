@@ -1251,3 +1251,12 @@ func Test_sortCards(t *testing.T) {
 	res := sortCards(inputTest)
 	fmt.Println(res)
 }
+
+func Test_handSorting(t *testing.T) {
+	inputTest := [2]Card{
+		{Rank: 3, Suit: "方片"},
+		{Rank: 4, Suit: "梅花"},
+	}
+	res := handSorting(inputTest)
+	fmt.Println(res)
+}
