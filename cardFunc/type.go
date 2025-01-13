@@ -67,4 +67,5 @@ type RoundHistory struct {
 type HandConfig struct {
 	PlayerNumber int        `json:"playernumber"`
 	HandCardList []HandCard `json:"handcardlist"`
+	RoundNumber  int        `json:"roundnumber"`
 }
