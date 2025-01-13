@@ -28,7 +28,7 @@ func shuffleJudgeDemo(playlist []Players, appointHandCardList []HandCard) (winne
 			}
 			handTempList = append(handTempList, handTemp)
 		}
-		fmt.Println("指定牌的长度: ", len(tempAppointHand)) //debug
+		// fmt.Println("指定牌的长度: ", len(tempAppointHand)) //debug
 		Card52 := shortOfShuffleCard(tempAppointHand)
 		resHandListTemp, pubHandListTemp := DealCards(Card52, playerNum-len(handTempList))
 		resHandList = append(handTempList, resHandListTemp...)
@@ -37,8 +37,8 @@ func shuffleJudgeDemo(playlist []Players, appointHandCardList []HandCard) (winne
 		Card52 = ShuffleCard() //洗牌
 		resHandList, pubHandList = DealCards(Card52, playerNum)
 	}
-	fmt.Println("手牌组：", len(resHandList), resHandList)        //debug
-	fmt.Println("公共手牌长度以及手牌 ", len(pubHandList), pubHandList) //debug
+	// fmt.Println("手牌组：", len(resHandList), resHandList)        //debug
+	// fmt.Println("公共手牌长度以及手牌 ", len(pubHandList), pubHandList) //debug
 
 	maxGrade := 0
 	maxCard5 := [5]int{0, 0, 0, 0, 0}
@@ -56,8 +56,8 @@ func shuffleJudgeDemo(playlist []Players, appointHandCardList []HandCard) (winne
 		tempCard7 = sortCards(tempCard7)
 		playlist[i].Card7 = tempCard7
 		playlist[i].Grade, playlist[i].Card5 = Judge5From7(playlist[i].Card7)
-		fmt.Println(playlist[i].ID, playlist[i].Hand)              //debug
-		fmt.Println(playlist[i].Grade, "-max-", playlist[i].Card5) //debug
+		// fmt.Println(playlist[i].ID, playlist[i].Hand)              //debug
+		// fmt.Println(playlist[i].Grade, "-max-", playlist[i].Card5) //debug
 		if maxGrade == playlist[i].Grade {
 			for j := 0; j < 5; j++ {
 				if playlist[i].Card5[j].Rank > maxCard5[j] {
@@ -85,13 +85,13 @@ func shuffleJudgeDemo(playlist []Players, appointHandCardList []HandCard) (winne
 			continue
 		}
 	}
-	fmt.Println("len ", len(winner))   //debug
-	fmt.Println("maxGrade ", maxGrade) //debug
-	fmt.Println("maxCard5 ", maxCard5) //debug
+	// fmt.Println("len ", len(winner))   //debug
+	// fmt.Println("maxGrade ", maxGrade) //debug
+	// fmt.Println("maxCard5 ", maxCard5) //debug
 
 	for i := 0; i < len(playlist); i++ {
 		if playlist[i].Grade == maxGrade {
-			fmt.Println("最大的ID ", playlist[i].ID) //debug
+			// fmt.Println("最大的ID ", playlist[i].ID) //debug
 			sign := true
 			for j := 0; j < 5; j++ {
 				if playlist[i].Card5[j].Rank == maxCard5[j] {
@@ -105,7 +105,7 @@ func shuffleJudgeDemo(playlist []Players, appointHandCardList []HandCard) (winne
 			}
 		}
 	}
-	fmt.Println("len2 ", len(winner)) //debug
+	// fmt.Println("len2 ", len(winner)) //debug
 
 	return winner
 }
@@ -1258,6 +1258,22 @@ func (p *HandCard) sortTwoCards() {
 	}
 }
 
+// 花色优先级：黑桃 > 红桃 > 梅花 > 方片
+func suitPriority(suit string) int {
+	switch suit {
+	case "黑桃":
+		return 1
+	case "红桃":
+		return 2
+	case "梅花":
+		return 3
+	case "方片":
+		return 4
+	default:
+		return 5
+	}
+}
+
 // max 返回较大的数
 func max(a, b int) int {
 	if a > b {
@@ -1272,21 +1288,6 @@ func sortDescending(arr []int) {
 	sort.Slice(arr, func(i, j int) bool {
 		return arr[i] > arr[j] // 比较函数，定义降序排序
 	})
-}
-
-// handSorting 手牌排序
-func handSorting(resHand []Card) []Card { //手牌排序
-	n := len(resHand)
-	for j := 0; j < n; j++ {
-		for k := j + 1; k < n; k++ {
-			if resHand[j].Rank < resHand[k].Rank {
-				temp := resHand[j]
-				resHand[j] = resHand[k]
-				resHand[k] = temp
-			}
-		}
-	}
-	return resHand
 }
 
 // sortCards对[7]Card数组进行排序
@@ -1307,10 +1308,29 @@ func sortCards(cards [7]Card) [7]Card {
 	return cards
 }
 
-// 定义花色对应的权重，用于比较相同牌面数字时的大小关系
+// 废弃 定义花色对应的权重，用于比较相同牌面数字时的大小关系
 var suitWeight = map[string]int{
 	"黑桃": 4,
 	"红桃": 3,
 	"方片": 2,
 	"梅花": 1,
+}
+
+// 废弃 handSorting 手牌排序
+func handSorting(resHand [2]Card) [2]Card { //手牌排序
+
+	if resHand[0].Rank < resHand[1].Rank {
+		resHand[0], resHand[1] = resHand[1], resHand[0]
+		return resHand
+	} else {
+		if resHand[0].Rank == resHand[1].Rank {
+			if suitPriority(resHand[0].Suit) < suitPriority(resHand[1].Suit) {
+				resHand[0], resHand[1] = resHand[1], resHand[0]
+			}
+		} else {
+			return resHand
+
+		}
+		return resHand
+	}
 }
