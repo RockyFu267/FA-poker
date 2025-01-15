@@ -5,6 +5,7 @@ import (
 	"io"
 	"math/rand"
 	"os"
+	"sort"
 	"strconv"
 	"time"
 
@@ -19,6 +20,7 @@ var entertainmentIDs = []string{
 	"顺子制造机",
 	"葫芦小王子",
 	"皇家同花顺饲养员",
+	"铁头娃",
 	//以下都是台球名人的名字，姓都改成了傅，也可以是其他体育明行的名字
 	"傅沙利文",
 	"傅尔摩斯",
@@ -83,27 +85,66 @@ func HandWinRateSimulation(input HandConfig) error {
 			}
 		}
 	}
-	// //统计获得胜利最多的玩家
+	// 统计获得胜利最多的玩家
 	mostWinPlayer := make(map[string]int)
-	// //统计获得胜利做的手牌
-	mostWinPlayerHand := make(map[HandCard]int)
+	type winnerKV struct {
+		Key   string
+		Value int
+	}
+	var mostWinPlayerSlice []winnerKV
+	//统计获得胜利做的手牌
+	mostWinHand := make(map[HandCard]int)
+	type hadnKV struct {
+		Key   HandCard
+		Value int
+	}
+	var mostWinrHandSlice []hadnKV
+	//统计平局的次数
+	var tieCount int
+
 	// 模拟牌局
 	for i := 0; i < input.RoundNumber; i++ {
 		winners := shuffleJudgeDemo(players, input.HandCardList)
-		for k, v := range winners {
+		if len(winners) > 1 {
+			fmt.Println("出现了多个玩家同时获得胜利的情况")
+			tieCount++
+			continue
+		}
+		for _, v := range winners {
 			// fmt.Println("--AAA---" + strconv.Itoa(i+1) + "---AAA---")
-			fmt.Println(k, v)
+			// fmt.Println(k, v) //debug
 			//统计获得胜利最多的玩家
 			mostWinPlayer[v.ID]++
 			//统计获得胜利做的手牌
-			mostWinPlayerHand[v.Hand]++
+			mostWinHand[v.Hand]++
 		}
 	}
+
+	for k, v := range mostWinPlayer {
+		mostWinPlayerSlice = append(mostWinPlayerSlice, winnerKV{k, v})
+	}
+	for k, v := range mostWinHand {
+		mostWinrHandSlice = append(mostWinrHandSlice, hadnKV{k, v})
+	}
+	//输出排序结果
+	sort.Slice(mostWinPlayerSlice, func(i, j int) bool {
+		return mostWinPlayerSlice[i].Value > mostWinPlayerSlice[j].Value
+	})
+	sort.Slice(mostWinrHandSlice, func(i, j int) bool {
+		return mostWinrHandSlice[i].Value > mostWinrHandSlice[j].Value
+	})
 	for k, v := range players {
 		fmt.Println(k, v.ID)
 	}
-	fmt.Println(mostWinPlayer)
-	fmt.Println(mostWinPlayerHand)
+	// fmt.Println(mostWinPlayer) //debug
+	// fmt.Println(mostWinHand) //debug
+	for i := 0; i < input.PlayerNumber; i++ {
+		fmt.Println(mostWinPlayerSlice[i].Key, mostWinPlayerSlice[i].Value)
+	}
+	for i := 0; i < len(mostWinrHandSlice); i++ {
+		fmt.Println(mostWinrHandSlice[i].Key.HandCard[0].CardTranslate(), mostWinrHandSlice[i].Key.HandCard[1].CardTranslate(), mostWinrHandSlice[i].Value)
+	}
+	fmt.Println("平局次数：", tieCount)
 
 	return nil
 }
