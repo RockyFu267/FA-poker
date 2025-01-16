@@ -39,32 +39,35 @@ func HandWinRateSimulation(input HandConfig) error {
 	if input.PlayerNumber < 2 || input.PlayerNumber > 10 {
 		return fmt.Errorf("playNumber must 大于等于 2，小于等于 10")
 	}
-	if input.RoundNumber < 1 || input.RoundNumber > 100000 {
+	if input.RoundNumber < 10000 || input.RoundNumber > 100000 {
 		return fmt.Errorf("roundNumber must 大于等于 1,小于等于 100000")
 	}
 	if len(input.HandCardList) > input.PlayerNumber {
 		return fmt.Errorf("playNumber must 大于等于 HandCardList长度")
 	}
-	for k, v := range input.HandCardList {
-		if v.HandCard[0].Rank < 2 || v.HandCard[0].Rank > 14 || v.HandCard[1].Rank < 2 || v.HandCard[1].Rank > 14 {
-			return fmt.Errorf("第" + strconv.Itoa(k+1) + "个元素的Rank值有问题，正确范围2-14之间")
+	if len(input.HandCardList) > 0 {
+		for k, v := range input.HandCardList {
+			if v.HandCard[0].Rank < 2 || v.HandCard[0].Rank > 14 || v.HandCard[1].Rank < 2 || v.HandCard[1].Rank > 14 {
+				return fmt.Errorf("第" + strconv.Itoa(k+1) + "个元素的Rank值有问题，正确范围2-14之间")
+			}
+			if v.HandCard[0].Suit != "黑桃" && v.HandCard[0].Suit != "红桃" && v.HandCard[0].Suit != "方片" && v.HandCard[0].Suit != "梅花" {
+				return fmt.Errorf("第" + strconv.Itoa(k+1) + "个元素的Suit值有问题,花色范围只在 黑桃  红桃  方片  梅花 中选择")
+			}
+			if ok := cardMap[v.HandCard[0]]; ok {
+				return fmt.Errorf("第" + strconv.Itoa(k+1) + "个元素的手牌有问题，不能有重复的牌")
+			} else {
+				cardMap[v.HandCard[0]] = true
+			}
+			if ok := cardMap[v.HandCard[1]]; ok {
+				return fmt.Errorf("第" + strconv.Itoa(k+1) + "个元素的手牌有问题，不能有重复的牌")
+			} else {
+				cardMap[v.HandCard[1]] = true
+			}
+			// handTemp := handSorting(v.HandCard)
+			input.HandCardList[k].sortTwoCards()
 		}
-		if v.HandCard[0].Suit != "黑桃" && v.HandCard[0].Suit != "红桃" && v.HandCard[0].Suit != "方片" && v.HandCard[0].Suit != "梅花" {
-			return fmt.Errorf("第" + strconv.Itoa(k+1) + "个元素的Suit值有问题,花色范围只在 黑桃  红桃  方片  梅花 中选择")
-		}
-		if ok := cardMap[v.HandCard[0]]; ok {
-			return fmt.Errorf("第" + strconv.Itoa(k+1) + "个元素的手牌有问题，不能有重复的牌")
-		} else {
-			cardMap[v.HandCard[0]] = true
-		}
-		if ok := cardMap[v.HandCard[1]]; ok {
-			return fmt.Errorf("第" + strconv.Itoa(k+1) + "个元素的手牌有问题，不能有重复的牌")
-		} else {
-			cardMap[v.HandCard[1]] = true
-		}
-		// handTemp := handSorting(v.HandCard)
-		input.HandCardList[k].sortTwoCards()
 	}
+
 	// 初始化玩家
 	players := make([]Players, input.PlayerNumber)
 
@@ -98,7 +101,17 @@ func HandWinRateSimulation(input HandConfig) error {
 		Key   HandCard
 		Value int
 	}
+	//统计同色的两张手牌获胜次数
+	mostWinHandSuit := make(map[string]int)
+	//统计不同花色且rank不相同的手牌获胜次数
+	mostWinHandOffSuit := make(map[string]int)
+	//统计两张rank相同的手牌获胜次数
+	mostWinHandSameRank := make(map[string]int)
+
 	var mostWinrHandSlice []hadnKV
+	var mostWinrHandSuitSlice []winnerKV
+	var mostWinrHandOffSuitSlice []winnerKV
+	var mostWinrHandSameRankSlice []winnerKV
 	//统计平局的次数
 	var tieCount int
 
@@ -106,7 +119,7 @@ func HandWinRateSimulation(input HandConfig) error {
 	for i := 0; i < input.RoundNumber; i++ {
 		winners := shuffleJudgeDemo(players, input.HandCardList)
 		if len(winners) > 1 {
-			fmt.Println("出现了多个玩家同时获得胜利的情况")
+			// fmt.Println("出现了多个玩家同时获得胜利的情况") //debug
 			tieCount++
 			continue
 		}
@@ -117,6 +130,18 @@ func HandWinRateSimulation(input HandConfig) error {
 			mostWinPlayer[v.ID]++
 			//统计获得胜利做的手牌
 			mostWinHand[v.Hand]++
+			if v.Hand.HandCard[0].Suit == v.Hand.HandCard[1].Suit {
+				mostWinHandSuit[v.Hand.HandCard[0].CardRankTranslate()+v.Hand.HandCard[1].CardRankTranslate()+"S"]++
+				continue
+			}
+			if v.Hand.HandCard[0].Suit != v.Hand.HandCard[1].Suit && v.Hand.HandCard[0].Rank != v.Hand.HandCard[1].Rank {
+				mostWinHandOffSuit[v.Hand.HandCard[0].CardRankTranslate()+v.Hand.HandCard[1].CardRankTranslate()+"O"]++
+				continue
+			}
+			if v.Hand.HandCard[0].Rank == v.Hand.HandCard[1].Rank {
+				mostWinHandSameRank[v.Hand.HandCard[0].CardRankTranslate()+v.Hand.HandCard[1].CardRankTranslate()]++
+				continue
+			}
 		}
 	}
 
@@ -126,12 +151,31 @@ func HandWinRateSimulation(input HandConfig) error {
 	for k, v := range mostWinHand {
 		mostWinrHandSlice = append(mostWinrHandSlice, hadnKV{k, v})
 	}
+	for k, v := range mostWinHandSuit {
+		mostWinrHandSuitSlice = append(mostWinrHandSuitSlice, winnerKV{k, v})
+	}
+	for k, v := range mostWinHandOffSuit {
+		mostWinrHandOffSuitSlice = append(mostWinrHandOffSuitSlice, winnerKV{k, v})
+	}
+	for k, v := range mostWinHandSameRank {
+		mostWinrHandSameRankSlice = append(mostWinrHandSameRankSlice, winnerKV{k, v})
+	}
+
 	//输出排序结果
 	sort.Slice(mostWinPlayerSlice, func(i, j int) bool {
 		return mostWinPlayerSlice[i].Value > mostWinPlayerSlice[j].Value
 	})
 	sort.Slice(mostWinrHandSlice, func(i, j int) bool {
 		return mostWinrHandSlice[i].Value > mostWinrHandSlice[j].Value
+	})
+	sort.Slice(mostWinrHandSuitSlice, func(i, j int) bool {
+		return mostWinrHandSuitSlice[i].Value > mostWinrHandSuitSlice[j].Value
+	})
+	sort.Slice(mostWinrHandOffSuitSlice, func(i, j int) bool {
+		return mostWinrHandOffSuitSlice[i].Value > mostWinrHandOffSuitSlice[j].Value
+	})
+	sort.Slice(mostWinrHandSameRankSlice, func(i, j int) bool {
+		return mostWinrHandSameRankSlice[i].Value > mostWinrHandSameRankSlice[j].Value
 	})
 	for k, v := range players {
 		fmt.Println(k, v.ID)
@@ -141,8 +185,21 @@ func HandWinRateSimulation(input HandConfig) error {
 	for i := 0; i < input.PlayerNumber; i++ {
 		fmt.Println(mostWinPlayerSlice[i].Key, mostWinPlayerSlice[i].Value)
 	}
-	for i := 0; i < len(mostWinrHandSlice); i++ {
-		fmt.Println(mostWinrHandSlice[i].Key.HandCard[0].CardTranslate(), mostWinrHandSlice[i].Key.HandCard[1].CardTranslate(), mostWinrHandSlice[i].Value)
+	if len(input.HandCardList) > 0 {
+		for i := 0; i < len(mostWinrHandSlice); i++ { //输出具体的卡牌
+			fmt.Println(mostWinrHandSlice[i].Key.HandCard[0].CardTranslate(), mostWinrHandSlice[i].Key.HandCard[1].CardTranslate(), mostWinrHandSlice[i].Value)
+		}
+	} else {
+		fmt.Println(len(mostWinHandSuit))                 //debug
+		for i := 0; i < len(mostWinrHandSuitSlice); i++ { //输出xx_S的胜率
+			fmt.Println(mostWinrHandSuitSlice[i].Key, mostWinrHandSuitSlice[i].Value)
+		}
+		for i := 0; i < len(mostWinrHandOffSuitSlice); i++ { //输出xx_O的胜率
+			fmt.Println(mostWinrHandOffSuitSlice[i].Key, mostWinrHandOffSuitSlice[i].Value)
+		}
+		for i := 0; i < len(mostWinrHandSameRankSlice); i++ { //输出xx的胜率
+			fmt.Println(mostWinrHandSameRankSlice[i].Key, mostWinrHandSameRankSlice[i].Value)
+		}
 	}
 	fmt.Println("平局次数：", tieCount)
 
