@@ -1285,12 +1285,19 @@ func Test_shuffleJudgeDemo01(t *testing.T) {
 	// 		{Rank: 9, Suit: "红桃"},
 	// 	},
 	// })
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < 20000; i++ {
 		winners, handmap := shuffleJudgeDemo01(players, appointHandCardList)
 		for k, v := range winners {
 			fmt.Println("--AAA---")
 			fmt.Println(k, v)
 			fmt.Println(handmap)
+			var temp int
+			for _, v := range handmap {
+				temp = temp + v
+			}
+			if temp < 6 {
+				fmt.Println("---------------------------------------------------------------------")
+			}
 		}
 	}
 }
