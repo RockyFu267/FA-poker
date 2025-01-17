@@ -14,5 +14,5 @@ handcardlist:
   #     rank: 13
 
 #指定执行次数   大于等于 10000,小于等于 100000
-roundnumber: 40000
+roundnumber: 2
 

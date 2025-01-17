@@ -69,3 +69,8 @@ type HandConfig struct {
 	HandCardList []HandCard `json:"handcardlist"`
 	RoundNumber  int        `json:"roundnumber"`
 }
+
+// type PracticeList struct {
+// 	AllHandList map[HandCard]int `json:"allhandlist"`
+// 	WinnerList  Players          `json:"winerlist"`
+// }

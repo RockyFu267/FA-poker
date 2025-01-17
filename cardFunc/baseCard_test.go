@@ -1238,6 +1238,63 @@ func Test_shuffleJudgeDemo(t *testing.T) {
 	}
 }
 
+func Test_shuffleJudgeDemo01(t *testing.T) {
+	var p1, p2, p3, p4, p5, p6 Players
+	p1.ID = "1"
+	p2.ID = "2"
+	p3.ID = "3"
+	p4.ID = "4"
+	p5.ID = "5"
+	p6.ID = "6"
+	var players = []Players{p1, p2, p3, p4, p5, p6}
+	var appointHandCardList []HandCard
+	appointHandCardList = append(appointHandCardList, HandCard{
+		HandCard: [2]Card{
+			{Rank: 14, Suit: "黑桃"},
+			{Rank: 14, Suit: "红桃"},
+		},
+	})
+	// appointHandCardList = append(appointHandCardList, HandCard{
+	// 	HandCard: [2]Card{
+	// 		{Rank: 14, Suit: "黑桃"},
+	// 		{Rank: 14, Suit: "红桃"},
+	// 	},
+	// }, HandCard{
+	// 	HandCard: [2]Card{
+	// 		{Rank: 13, Suit: "黑桃"},
+	// 		{Rank: 13, Suit: "红桃"},
+	// 	},
+	// }, HandCard{
+	// 	HandCard: [2]Card{
+	// 		{Rank: 12, Suit: "黑桃"},
+	// 		{Rank: 12, Suit: "红桃"},
+	// 	},
+	// }, HandCard{
+	// 	HandCard: [2]Card{
+	// 		{Rank: 11, Suit: "黑桃"},
+	// 		{Rank: 11, Suit: "红桃"},
+	// 	},
+	// }, HandCard{
+	// 	HandCard: [2]Card{
+	// 		{Rank: 10, Suit: "黑桃"},
+	// 		{Rank: 10, Suit: "红桃"},
+	// 	},
+	// }, HandCard{
+	// 	HandCard: [2]Card{
+	// 		{Rank: 9, Suit: "黑桃"},
+	// 		{Rank: 9, Suit: "红桃"},
+	// 	},
+	// })
+	for i := 0; i < 10000; i++ {
+		winners, handmap := shuffleJudgeDemo01(players, appointHandCardList)
+		for k, v := range winners {
+			fmt.Println("--AAA---")
+			fmt.Println(k, v)
+			fmt.Println(handmap)
+		}
+	}
+}
+
 func Test_sortCards(t *testing.T) {
 	inputTest := [7]Card{
 		{Rank: 4, Suit: "方片"},
