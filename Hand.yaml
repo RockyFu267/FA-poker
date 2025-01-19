@@ -1,5 +1,5 @@
 #指定玩家数量 大于1小于11
-playernumber: 9
+playernumber: 6
 #指定玩家手牌  不需要指定的玩家手牌可以删掉
 handcardlist: 
   # - handcard: 
@@ -13,6 +13,6 @@ handcardlist:
   #   - suit: "梅花"
   #     rank: 13
 
-#指定执行次数   大于等于 10000,小于等于 100000
-roundnumber: 20000
+#指定执行次数   大于等于 1,小于等于 100000
+roundnumber: 80000
 
