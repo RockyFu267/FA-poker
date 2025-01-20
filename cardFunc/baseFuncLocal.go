@@ -187,9 +187,16 @@ func HandWinRateSimulationDemo01(input HandConfig) error {
 		if n > 10 {
 			n = 10
 		}
-		fmt.Println("胜率位于前列的手牌组合:")
+		fmt.Println("胜利次数位于前列的手牌组合以及对应胜率:")
 		for i := 0; i < n; i++ { //输出具体的卡牌
-			fmt.Println(mostWinrHandSlice[i].Key.HandCard[0].CardTranslate(), mostWinrHandSlice[i].Key.HandCard[1].CardTranslate(), mostWinrHandSlice[i].Value)
+			fmt.Println(mostWinrHandSlice[i].Key.HandCard[0].CardTranslate()+mostWinrHandSlice[i].Key.HandCard[1].CardTranslate(), mostWinrHandSlice[i].Value, float64(mostWinrHandSlice[i].Value)/float64(input.RoundNumber)*100, "%")
+		}
+		//指定手牌的胜率
+		fmt.Println("指定手牌的胜率如下:")
+		for i := 0; i < len(input.HandCardList); i++ {
+			temp := mostWinHand[input.HandCardList[i]] //指定手牌获得的胜利次数
+			realRate := float64(temp) / float64(input.RoundNumber)
+			fmt.Println(input.HandCardList[i].HandCard[0].CardTranslate()+input.HandCardList[i].HandCard[1].CardTranslate(), temp, realRate*100, "%")
 		}
 	} else {
 		fmt.Println("169组so组合的胜率排序如下：")
