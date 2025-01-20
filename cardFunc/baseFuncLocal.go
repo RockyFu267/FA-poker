@@ -184,24 +184,25 @@ func HandWinRateSimulationDemo01(input HandConfig) error {
 	}
 	if len(input.HandCardList) > 0 {
 		n := len(mostWinrHandSlice)
-		if n > 10 {
-			n = 10
+		fmt.Println("获得过胜利的手牌组合数:", n)
+		if n > 50 {
+			n = 50
 		}
 		fmt.Println("胜利次数位于前列的手牌组合以及对应胜率:")
 		for i := 0; i < n; i++ { //输出具体的卡牌
-			fmt.Println(mostWinrHandSlice[i].Key.HandCard[0].CardTranslate()+mostWinrHandSlice[i].Key.HandCard[1].CardTranslate(), mostWinrHandSlice[i].Value, float64(mostWinrHandSlice[i].Value)/float64(input.RoundNumber)*100, "%")
+			fmt.Println(mostWinrHandSlice[i].Key.HandCard[0].CardTranslate()+mostWinrHandSlice[i].Key.HandCard[1].CardTranslate(), mostWinrHandSlice[i].Value, strconv.FormatFloat(float64(mostWinrHandSlice[i].Value)/float64(input.RoundNumber)*100, 'f', 4, 64)+"%")
 		}
 		//指定手牌的胜率
 		fmt.Println("指定手牌的胜率如下:")
 		for i := 0; i < len(input.HandCardList); i++ {
 			temp := mostWinHand[input.HandCardList[i]] //指定手牌获得的胜利次数
 			realRate := float64(temp) / float64(input.RoundNumber)
-			fmt.Println(input.HandCardList[i].HandCard[0].CardTranslate()+input.HandCardList[i].HandCard[1].CardTranslate(), temp, realRate*100, "%")
+			fmt.Println(input.HandCardList[i].HandCard[0].CardTranslate()+input.HandCardList[i].HandCard[1].CardTranslate(), temp, strconv.FormatFloat(realRate*100, 'f', 4, 64)+"%")
 		}
 	} else {
-		fmt.Println("169组so组合的胜率排序如下：")
-		for i := 0; i < len(allHandRateSlice); i++ { //输出所有手牌的胜率
-			fmt.Println(allHandRateSlice[i].Key, allHandRateSlice[i].Value)
+		fmt.Println("169组so组合的胜率排序如下：(还包括出现次数，和胜利次数)")
+		for i := 0; i < len(allHandRateSlice); i++ { //输出所有手牌的胜率以及出现次数
+			fmt.Println("第"+strconv.Itoa(i+1)+"名: ", allHandRateSlice[i].Key, strconv.FormatFloat(allHandRateSlice[i].Value*100, 'f', 4, 64)+"%", allHandListOrigin[allHandRateSlice[i].Key], allWinRealRate[allHandRateSlice[i].Key])
 		}
 	}
 	fmt.Println("平局次数：", tieCount)

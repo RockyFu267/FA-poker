@@ -1,18 +1,18 @@
 #指定玩家数量 大于1小于11
 playernumber: 6
 #指定玩家手牌  不需要指定的玩家手牌可以删掉
-handcardlist: 
-  - handcard: 
-    - suit: "红桃"
-      rank: 14
-    - suit: "黑桃"
-      rank: 14
-  - handcard: 
-    - suit: "方片"
-      rank: 13
-    - suit: "梅花"
-      rank: 13
+# handcardlist: 
+#   - handcard: 
+#     - suit: "红桃"
+#       rank: 14
+#     - suit: "黑桃"
+#       rank: 14
+#   - handcard: 
+#     - suit: "方片"
+#       rank: 10
+#     - suit: "梅花"
+#       rank: 11
 
 #指定执行次数   大于等于 1,小于等于 100000
-roundnumber: 10000
+roundnumber: 20000
 
