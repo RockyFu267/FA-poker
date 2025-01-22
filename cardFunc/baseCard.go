@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// 指定人数 洗牌，发牌，并比较谁的牌最大,并且可以选择指定手牌
+// 指定人数 洗牌，发牌，并比较谁的牌最大,并且可以选择指定手牌 测试
 func shuffleJudgeDemo01(playlist []Players, appointHandCardList []HandCard) (winner []Players, handlist map[string]int) {
 	playerNum := len(playlist)
 	var Card52 []Card
