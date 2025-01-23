@@ -11,8 +11,8 @@ playernumber: 6
 #     - suit: "方片"
 #       rank: 10
 #     - suit: "梅花"
-#       rank: 11
+#       rank: 10
 
 #指定执行次数   大于等于 1,小于等于 100000
-roundnumber: 20000
+roundnumber: 10000
 

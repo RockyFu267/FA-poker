@@ -88,6 +88,8 @@ func HandWinRateSimulationDemo01(input HandConfig) error {
 			}
 		}
 	}
+	// 统计获胜的牌力类型
+	winGradeList := make(map[string]int)
 	// 统计获得胜利最多的玩家
 	mostWinPlayer := make(map[string]int)
 	type winnerKV struct {
@@ -125,6 +127,27 @@ func HandWinRateSimulationDemo01(input HandConfig) error {
 		if len(winners) > 1 {
 			// fmt.Println("出现了多个玩家同时获得胜利的情况") //debug
 			tieCount++
+			switch winners[0].Grade { //统计获得胜利的牌力类型
+			case 0:
+				winGradeList["高牌"]++
+			case 1:
+				winGradeList["一对"]++
+			case 2:
+				winGradeList["两对"]++
+			case 3:
+				winGradeList["三条"]++
+			case 4:
+				winGradeList["顺子"]++
+				// fmt.Println(winners[0].Card7[0].CardTranslate(), winners[0].Card7[1].CardTranslate(), winners[0].Card7[2].CardTranslate(), winners[0].Card7[3].CardTranslate(), winners[0].Card7[4].CardTranslate(), winners[0].Card7[5].CardTranslate(), winners[0].Card7[6].CardTranslate(), "---debug") //debug
+			case 5:
+				winGradeList["同花"]++
+			case 6:
+				winGradeList["葫芦"]++
+			case 7:
+				winGradeList["四条"]++
+			case 8:
+				winGradeList["同花顺"]++
+			}
 			continue
 		}
 
@@ -135,6 +158,27 @@ func HandWinRateSimulationDemo01(input HandConfig) error {
 			mostWinPlayer[v.ID]++
 			//统计获得胜利做的手牌
 			mostWinHand[v.Hand]++
+			switch v.Grade { //统计获得胜利的牌力类型
+			case 0:
+				winGradeList["高牌"]++
+			case 1:
+				winGradeList["一对"]++
+			case 2:
+				winGradeList["两对"]++
+			case 3:
+				winGradeList["三条"]++
+			case 4:
+				winGradeList["顺子"]++
+				// fmt.Println(v.Card7[0].CardTranslate(), v.Card7[1].CardTranslate(), v.Card7[2].CardTranslate(), v.Card7[3].CardTranslate(), v.Card7[4].CardTranslate(), v.Card7[5].CardTranslate(), v.Card7[6].CardTranslate(), "------------------------debug") //debug
+			case 5:
+				winGradeList["同花"]++
+			case 6:
+				winGradeList["葫芦"]++
+			case 7:
+				winGradeList["四条"]++
+			case 8:
+				winGradeList["同花顺"]++
+			}
 			if v.Hand.HandCard[0].Suit == v.Hand.HandCard[1].Suit {
 				allWinRealRate[v.Hand.HandCard[0].CardRankTranslate()+v.Hand.HandCard[1].CardRankTranslate()+"s"]++
 				continue
@@ -206,6 +250,7 @@ func HandWinRateSimulationDemo01(input HandConfig) error {
 		}
 	}
 	fmt.Println("平局次数：", tieCount)
+	fmt.Println("成牌牌力分布统计：", winGradeList)
 	return nil
 }
 

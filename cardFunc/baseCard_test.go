@@ -1324,3 +1324,51 @@ func Test_handSorting(t *testing.T) {
 	res := handSorting(inputTest)
 	fmt.Println(res)
 }
+
+func Test_Judge5From7Demo01(t *testing.T) {
+	// 统计获胜的牌力类型
+	winGradeList := make(map[string]int)
+	cardList := make(map[string]int)
+	for i := 0; i < 100000; i++ {
+		Card52 := ShuffleCard() //洗牌
+		inputTest := [7]Card{
+			Card52[0],
+			Card52[1],
+			Card52[2],
+			Card52[3],
+			Card52[4],
+			Card52[5],
+			Card52[6],
+		}
+		for _, v := range inputTest {
+			cardList[v.CardTranslate()]++
+		}
+		inputTest = sortCards(inputTest)
+		grade, card5 := Judge5From7(inputTest)
+		switch grade { //统计获得胜利的牌力类型
+		case 0:
+			winGradeList["高牌"]++
+		case 1:
+			winGradeList["一对"]++
+		case 2:
+			winGradeList["两对"]++
+		case 3:
+			winGradeList["三条"]++
+		case 4:
+			winGradeList["顺子"]++
+			fmt.Println(card5[0].CardTranslate(), card5[1].CardTranslate(), card5[2].CardTranslate(), card5[3].CardTranslate(), card5[4].CardTranslate(), "---debug") //debug
+		case 5:
+			winGradeList["同花"]++
+		case 6:
+			winGradeList["葫芦"]++
+		case 7:
+			winGradeList["四条"]++
+		case 8:
+			winGradeList["同花顺"]++
+		}
+		//fmt.Println(card5[0].CardTranslate(), card5[1].CardTranslate(), card5[2].CardTranslate(), card5[3].CardTranslate(), card5[4].CardTranslate(), "---debug") //debug
+	}
+	fmt.Println(winGradeList)
+	fmt.Println(cardList)
+
+}

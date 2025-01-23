@@ -12,7 +12,7 @@ func main() {
 	flag.Parse()
 	//检查参数合法性
 	if *startsps == "" {
-		log.Println("Please use the sps parameter correctly and enter the specified configuration file path.")
+		log.Println("Please use the <-sps> parameter correctly and enter the specified configuration file path.")
 		return
 	}
 	path := *startsps
