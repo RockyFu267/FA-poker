@@ -120,7 +120,7 @@ func HandWinRateSimulationDemo01(input HandConfig) error {
 
 	// 模拟牌局
 	for i := 0; i < input.RoundNumber; i++ {
-		winners, temphandlist := shuffleJudgeDemo01(players, input.HandCardList)
+		winners, temphandlist := shuffleJudgeDemo01(players, input.HandCardList, input.DebugSwitch)
 		for k, v := range temphandlist {
 			allHandListOrigin[k] = allHandListOrigin[k] + v
 		}

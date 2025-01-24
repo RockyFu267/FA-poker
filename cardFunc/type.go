@@ -68,6 +68,7 @@ type HandConfig struct {
 	PlayerNumber int        `json:"playernumber"`
 	HandCardList []HandCard `json:"handcardlist"`
 	RoundNumber  int        `json:"roundnumber"`
+	DebugSwitch  bool       `json:"debugswitch"`
 }
 
 // type PracticeList struct {
