@@ -1,0 +1,2 @@
+# FA-poker
++ This is a single - player training tool for Texas Hold'em. It's designed to help players improve their skills in various aspects of the game, such as hand - reading, betting strategies, and decision - making under uncertainty. Whether you're a novice looking to get a better understanding of the basic rules or an experienced player aiming to refine your advanced techniques, this tool provides a convenient and efficient way to practice
