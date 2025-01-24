@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime"
+	"time"
 )
 
 func main() {
@@ -18,6 +20,12 @@ func main() {
 	// 	return
 	// }
 	// path := *startsps
+	if runtime.GOOS == "windows" {
+		fmt.Println("当前系统是 Windows")
+	} else {
+		fmt.Println("当前系统不是 Windows")
+	}
+
 	fmt.Println("如有bug，请反馈至rocky267@gmail.com")
 	fmt.Println("请输入 1 开始范围胜率模拟统计： 记得修改配置文件Hand.yaml")
 	fmt.Println("请输入 2 开始单人AOF模拟对局：(还没发版)")
@@ -43,21 +51,39 @@ func main() {
 				log.Println(err)
 				return
 			}
+			if runtime.GOOS == "windows" {
+				time.Sleep(10000 * time.Second)
+			}
 			return
 		case "2":
 			fmt.Println("预计春节前出，催更请联系rocky267@gmail.com")
+			if runtime.GOOS == "windows" {
+				time.Sleep(10 * time.Second)
+			}
 			return
 		case "3":
 			fmt.Println("预计春节后，催更请联系rocky267@gmail.com")
+			if runtime.GOOS == "windows" {
+				time.Sleep(10 * time.Second)
+			}
 			return
 		case "4":
 			fmt.Println("预计春节后，催更请联系rocky267@gmail.com")
+			if runtime.GOOS == "windows" {
+				time.Sleep(10 * time.Second)
+			}
 			return
 		case "7":
 			fmt.Println("预计春节后，催更请联系rocky267@gmail.com")
+			if runtime.GOOS == "windows" {
+				time.Sleep(10 * time.Second)
+			}
 			return
 		default:
 			fmt.Println("有空就写,现在没空，催更请联系rocky267@gmail.com")
+			if runtime.GOOS == "windows" {
+				time.Sleep(10 * time.Second)
+			}
 			return
 		}
 
