@@ -16,19 +16,6 @@ func Test_ReadConfig(t *testing.T) {
 
 }
 
-func Test_HandWinRateSimulation(t *testing.T) {
-	handConfig, err := ReadConfig("/Users/fuao/Desktop/开发/github/FA-poker/Hand.yaml")
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	err = HandWinRateSimulation(handConfig)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-}
-
 func Test_HandWinRateSimulationDemo01(t *testing.T) {
 	handConfig, err := ReadConfig("/Users/fuao/Desktop/开发/github/FA-poker/Hand.yaml")
 	if err != nil {
@@ -36,6 +23,19 @@ func Test_HandWinRateSimulationDemo01(t *testing.T) {
 		return
 	}
 	err = HandWinRateSimulationDemo01(handConfig)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+}
+
+func Test_HandWinRateSimulationDemo02(t *testing.T) {
+	handConfig, err := ReadConfig("/Users/fuao/Desktop/开发/github/FA-poker/Hand.yaml")
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	err = HandWinRateSimulationDemo02(handConfig)
 	if err != nil {
 		log.Println(err)
 		return

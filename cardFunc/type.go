@@ -51,6 +51,14 @@ type Players struct {
 	IsActive     bool     `json:"isactive"`
 	IsFold       bool     `json:"isfold"`
 	IsAllIn      bool     `json:"isallin"`
+	WinCount     int      `json:"winCount"` //单人训练统计次数用的
+	WinRate      float64  `json:"winRate"`  //单人训练统计胜率用的
+	Vpip         float64  `json:"vpip"`     //Voluntarily Put In Pot主动入池率
+	PFR          float64  `json:"pfr"`      //Pre-Flop Raise 翻牌前加注概率
+	FRR          float64  `json:"frr"`      //Flop Raise 翻牌后加注概率
+	TRR          float64  `json:"trr"`      //Turn Raise 转牌后加注概率
+	RRR          float64  `json:"rrr"`      //River Raise 河牌后加注概率
+	ReRaise      float64  `json:"rerraise"` //Re-Raise 加注后加注概率
 }
 
 // RoundHistory	牌局历史
@@ -75,3 +83,42 @@ type HandConfig struct {
 // 	AllHandList map[HandCard]int `json:"allhandlist"`
 // 	WinnerList  Players          `json:"winerlist"`
 // }
+
+type HandConfigDemo02 struct {
+	PlayerNumber int              `json:"playernumber"`
+	HandCardList []HandCardDemo02 `json:"handcardlist"`
+	RoundNumber  int              `json:"roundnumber"`
+	DebugSwitch  bool             `json:"debugswitch"`
+}
+
+// HanCard 手牌
+type HandCardDemo02 struct {
+	HandCard [2]Card `json:"handCard"`
+	Advance  Advance `json:"advance"`
+}
+
+// Advance 高级配置，目前只有范围  单机使用
+type Advance struct {
+	Range float64 `json:"range"`
+}
+
+type PracticeResDemo02 struct {
+	PlayerWinCount []Players        `json:"playerwincount"` //统计玩家的获胜次数  按座次排序
+	WinGradeList   []WinGradeList   `json:"wingradelist"`   //获胜的成牌牌力分布统计  按出现次数排序
+	DrawCount      int              `json:"drawcount"`      //平局次数
+	So169Combo     []So169ComboList `json:"so169combo"`     //169组so组合的胜率统计  按胜率排序
+}
+
+type So169ComboList struct {
+	WinRateRank int     `json:"winraterank"`
+	So169Combo  string  `json:"so169combo"`
+	WinRate     float64 `json:"winrate"`
+	ExistCount  int     `json:"existcount"`
+	WinCount    int     `json:"wincount"`
+}
+
+type WinGradeList struct {
+	Grade     int    `json:"grade"`
+	GradeName string `json:"gradename"`
+	WinCount  int    `json:"wincount"`
+}

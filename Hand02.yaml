@@ -9,11 +9,31 @@ handcardlist:
       rank: 14
     - suit: "黑桃"
       rank: 14
+    # advance: 
+    #   range: 0.25
   - handcard: 
     - suit: "方片"
       rank: 10
     - suit: "梅花"
       rank: 10
+    # advance: 
+    #   range: 0.25
+
+#指定公共手牌
+publiccard:
+  flop:
+    - suit: "红桃"
+      rank: 14
+    - suit: "黑桃"
+      rank: 14
+    - suit: "方片"
+      rank: 10
+  turn:
+    - suit: "梅花"
+      rank: 10
+  river:
+    - suit: "梅花"
+      rank: 11
 
 #指定执行次数   大于等于 1,小于等于 100000
 roundnumber: 10000
