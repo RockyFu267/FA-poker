@@ -260,7 +260,7 @@ func HandWinRateSimulationDemo01(input HandConfig) error {
 	if input.PlayerNumber < 2 || input.PlayerNumber > 10 {
 		return fmt.Errorf("playNumber must 大于等于 2，小于等于 10")
 	}
-	if input.RoundNumber < 1 || input.RoundNumber > 100000 {
+	if input.RoundNumber < 1 || input.RoundNumber > 1000000 {
 		return fmt.Errorf("roundNumber must 大于等于 1,小于等于 100000")
 	}
 	if len(input.HandCardList) > input.PlayerNumber {
@@ -476,6 +476,37 @@ func HandWinRateSimulationDemo01(input HandConfig) error {
 }
 
 // ReadConfig 读取外部配置文件
+func ReadConfigDemo02(dir string) (HandConfigDemo02, error) {
+
+	// pwdPath, err := os.Getwd()
+	// if err != nil {
+	// 	return HandConfig{}, fmt.Errorf("get dirpath error: %v", err)
+	// }
+	// 使用os.Open打开文件，它返回一个文件指针和可能的错误
+	file, err := os.Open(dir)
+	if err != nil {
+		return HandConfigDemo02{}, fmt.Errorf("open config file error: %v", err)
+	}
+	// 使用defer关键字确保文件最终会被关闭，避免资源泄露
+	defer file.Close()
+
+	// 读取文件内容到字节切片，这里使用io.ReadAll来替代原ioutil.ReadFile的功能
+	yamlFile, err := io.ReadAll(file)
+	if err != nil {
+		return HandConfigDemo02{}, fmt.Errorf("read config file content error: %v", err)
+	}
+
+	var confDemo HandConfigDemo02
+	err = yaml.Unmarshal(yamlFile, &confDemo)
+	if err != nil {
+		return HandConfigDemo02{}, fmt.Errorf("unmarshal Config Error: %v", err)
+	}
+
+	return confDemo, nil
+
+}
+
+// ReadConfig 读取外部配置文件
 func ReadConfig(dir string) (HandConfig, error) {
 
 	// pwdPath, err := os.Getwd()
@@ -504,4 +535,10 @@ func ReadConfig(dir string) (HandConfig, error) {
 
 	return confDemo, nil
 
+}
+
+// 洗牌，支持去除指定的牌、与范围、或者不指定、任意玩家只指定一张牌，翻后flop、turn、river
+func shortOfShuffleCardDemo02(input HandConfigDemo02) (PlaysList []Players, pubCardRes PublicCard) {
+	fmt.Println(input)
+	return PlaysList, pubCardRes
 }

@@ -17,6 +17,8 @@ type CardRank struct {
 // HanCard 手牌
 type HandCard struct {
 	HandCard [2]Card `json:"handCard"`
+	Advance  Advance `json:"advance"`
+	PlayerID string  `json:"playerid,omitempty"`
 }
 
 // TableSingle 牌桌
@@ -73,10 +75,10 @@ type RoundHistory struct {
 }
 
 type HandConfig struct {
-	PlayerNumber int        `json:"playernumber"`
-	HandCardList []HandCard `json:"handcardlist"`
-	RoundNumber  int        `json:"roundnumber"`
-	DebugSwitch  bool       `json:"debugswitch"`
+	PlayerNumber int        `json:"playernumber,omitempty"`
+	HandCardList []HandCard `json:"handcardlist,omitempty"`
+	RoundNumber  int        `json:"roundnumber,omitempty"`
+	DebugSwitch  bool       `json:"debugswitch,omitempty"`
 }
 
 // type PracticeList struct {
@@ -85,21 +87,21 @@ type HandConfig struct {
 // }
 
 type HandConfigDemo02 struct {
-	PlayerNumber int              `json:"playernumber"`
-	HandCardList []HandCardDemo02 `json:"handcardlist"`
-	RoundNumber  int              `json:"roundnumber"`
-	DebugSwitch  bool             `json:"debugswitch"`
-}
-
-// HanCard 手牌
-type HandCardDemo02 struct {
-	HandCard [2]Card `json:"handCard"`
-	Advance  Advance `json:"advance"`
+	PlayerNumber int        `json:"playernumber,omitempty"`
+	HandCardList []HandCard `json:"handcardlist,omitempty"`
+	PublicCard   PublicCard `json:"publiccard,omitempty"`
+	RoundNumber  int        `json:"roundnumber,omitempty"`
+	DebugSwitch  bool       `json:"debugswitch,omitempty"`
 }
 
 // Advance 高级配置，目前只有范围  单机使用
 type Advance struct {
-	Range float64 `json:"range"`
+	Range float64 `json:"range,omitempty"`
+}
+type PublicCard struct {
+	Flop  [3]Card `json:"flop,omitempty"`
+	Turn  Card    `json:"turn,omitempty"`
+	River Card    `json:"river,omitempty"`
 }
 
 type PracticeResDemo02 struct {
