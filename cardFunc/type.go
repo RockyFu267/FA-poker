@@ -19,6 +19,7 @@ type HandCard struct {
 	HandCard [2]Card `json:"handCard"`
 	Advance  Advance `json:"advance,omitempty"`
 	PlayerID string  `json:"playerid,omitempty"`
+	UUID     string  `json:"uuid,omitempty"`
 }
 
 // TableSingle 牌桌
@@ -40,6 +41,10 @@ type TableSingle struct {
 // Players 玩家
 type Players struct {
 	ID           string   `json:"id"`
+	UUID         string   `json:"uuid"`             //前端使用
+	SeatID       int      `json:"seatid,omitempty"` //前端使用
+	Status       string   `json:"status,omitempty"` //前端使用
+	Name         string   `json:"name,omitempty"`   //前端使用
 	Hand         HandCard `json:"hand"`
 	ChipSum      int64    `json:"chipsum,omitempty"`
 	ChipBackHand int64    `json:"chipbackhand,omitempty"`
@@ -75,10 +80,11 @@ type RoundHistory struct {
 }
 
 type HandConfig struct {
-	PlayerNumber int        `json:"playernumber,omitempty"`
-	HandCardList []HandCard `json:"handcardlist,omitempty"`
-	RoundNumber  int        `json:"roundnumber,omitempty"`
-	DebugSwitch  bool       `json:"debugswitch,omitempty"`
+	PlayerNumber int           `json:"playernumber,omitempty"`
+	HandCardList []HandCard    `json:"handcardlist,omitempty"`
+	RoundNumber  int           `json:"roundnumber,omitempty"`
+	DebugSwitch  bool          `json:"debugswitch,omitempty"`
+	PlayerIDWeb  []PlayerIDWeb `json:"playeridweb,omitempty"` //前端使用
 }
 
 // type PracticeList struct {
@@ -87,11 +93,12 @@ type HandConfig struct {
 // }
 
 type HandConfigDemo02 struct {
-	PlayerNumber int        `json:"playernumber,omitempty"`
-	HandCardList []HandCard `json:"handcardlist,omitempty"`
-	PublicCard   PublicCard `json:"publiccard,omitempty"`
-	RoundNumber  int        `json:"roundnumber,omitempty"`
-	DebugSwitch  bool       `json:"debugswitch,omitempty"`
+	PlayerNumber int           `json:"playernumber,omitempty"`
+	HandCardList []HandCard    `json:"handcardlist,omitempty"`
+	PublicCard   PublicCard    `json:"publiccard,omitempty"`
+	RoundNumber  int           `json:"roundnumber,omitempty"`
+	DebugSwitch  bool          `json:"debugswitch,omitempty"`
+	PlayerIDWeb  []PlayerIDWeb `json:"layeridweb,omitempty"`
 }
 
 // Advance 高级配置，目前只有范围  单机使用
@@ -102,6 +109,12 @@ type PublicCard struct {
 	Flop  [3]Card `json:"flop,omitempty"`
 	Turn  Card    `json:"turn,omitempty"`
 	River Card    `json:"river,omitempty"`
+}
+type PlayerIDWeb struct {
+	Name   string `json:"name,omitempty"`
+	SeatID int    `json:"seatid,omitempty"`
+	Status string `json:"status,omitempty"`
+	UUID   string `json:"uuid,omitempty"`
 }
 
 type PracticeResDemo02 struct {
@@ -116,6 +129,7 @@ type PlayersRes struct {
 	PlayerID string  `json:"playerid"`
 	WinCount int     `json:"wincount"`
 	WinRate  float64 `json:"winrate"`
+	UUID     string  `json:"uuid"`
 }
 
 type So169Combo struct {

@@ -35,6 +35,9 @@ var entertainmentIDs = []string{
 
 // 单机模式功能1：模拟牌局统计胜率、牌型
 func HandWinRateSimulationWeb01(input HandConfig) (WebRes PracticeResDemo02, err error) {
+	if input.RoundNumber == 0 { //省去前段传参
+		input.RoundNumber = 10000
+	}
 	var cardMap = make(map[Card]bool)
 	if input.PlayerNumber < 2 || input.PlayerNumber > 10 {
 		return WebRes, fmt.Errorf("playNumber must 大于等于 2，小于等于 10")
@@ -77,17 +80,28 @@ func HandWinRateSimulationWeb01(input HandConfig) (WebRes PracticeResDemo02, err
 	// 随机分配娱乐ID
 	usedIDs := make(map[string]bool) // 记录已分配的ID，避免重复
 
-	for i := 0; i < input.PlayerNumber; i++ {
-		for {
-			randomIndex := rng.Intn(len(entertainmentIDs)) // 使用本地生成器生成随机索引
-			randomID := entertainmentIDs[randomIndex]      // 选择对应的ID
-			if !usedIDs[randomID] {                        // 检查是否已经被使用
-				players[i].ID = randomID // 分配给玩家
-				usedIDs[randomID] = true // 标记为已使用
-				break                    // 跳出循环，分配下一个玩家
+	if len(input.PlayerIDWeb) == 0 {
+		for i := 0; i < input.PlayerNumber; i++ {
+			for {
+				randomIndex := rng.Intn(len(entertainmentIDs)) // 使用本地生成器生成随机索引
+				randomID := entertainmentIDs[randomIndex]      // 选择对应的ID
+				if !usedIDs[randomID] {                        // 检查是否已经被使用
+					players[i].ID = randomID // 分配给玩家
+					usedIDs[randomID] = true // 标记为已使用
+					break                    // 跳出循环，分配下一个玩家
+				}
 			}
 		}
+	} else {
+		for i := 0; i < input.PlayerNumber; i++ {
+			players[i].ID = input.PlayerIDWeb[i].Name
+			players[i].SeatID = input.PlayerIDWeb[i].SeatID
+			players[i].UUID = input.PlayerIDWeb[i].UUID
+			players[i].Name = input.PlayerIDWeb[i].Name
+			players[i].Status = input.PlayerIDWeb[i].Status
+		}
 	}
+
 	// 统计获胜的牌力类型
 	winGradeList := make(map[string]int)
 	// 统计获得胜利最多的玩家
@@ -241,7 +255,7 @@ func HandWinRateSimulationWeb01(input HandConfig) (WebRes PracticeResDemo02, err
 		}
 	}
 	for i := 0; i < len(players); i++ {
-		WebRes.PlayerWinCount = append(WebRes.PlayerWinCount, PlayersRes{PlayerID: players[i].ID, WinCount: players[i].WinCount, WinRate: players[i].WinRate})
+		WebRes.PlayerWinCount = append(WebRes.PlayerWinCount, PlayersRes{PlayerID: players[i].ID, WinCount: players[i].WinCount, WinRate: players[i].WinRate, UUID: players[i].UUID})
 	}
 	if len(input.HandCardList) > 0 {
 		n := len(mostWinrHandSlice)
